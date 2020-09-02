@@ -1,0 +1,4 @@
+* Instructions: https://blackboard.stonybrook.edu/bbcswebdav/pid-5682800-dt-content-rid-45114897_1/courses/1208-CSE-214-SEC01-89077/hw1%283%29.html
+
+
+* Rubric: https://blackboard.stonybrook.edu/bbcswebdav/pid-5682800-dt-content-rid-45114898_1/courses/1208-CSE-214-SEC01-89077/hw1key%283%29.html
