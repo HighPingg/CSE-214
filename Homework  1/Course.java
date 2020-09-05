@@ -25,6 +25,9 @@ class Course {
      * @param code       The int to set code to.
      * @param section    The byte to set section to.
      * @param instructor The String to set instructor to.
+     * 
+     * @throws IllegalArgumentException Thrown if given parameters aren't valid
+     *                                  inputs and fails the static check methods
      */
 
     public Course(String name, String department, int code, byte section, String instructor)
@@ -185,14 +188,40 @@ class Course {
         }
     }
 
+    /**
+     * Returns a new clone of this Object
+     * 
+     * @return a new clone of this object using the current values of name,
+     *         department, code, section, and instructor
+     */
+
     @Override
     public Object clone() {
-        return new Object();
+        return new Course(name, department, code, section, instructor);
     }
+
+    /**
+     * Checks whether or not a given Object equals this Object
+     * 
+     * @param obj the Object to be checked whether or not it is the same as this
+     *            Object
+     * 
+     * @return - true if given Object is a Course and contains the same name,
+     *         department, code, section, and instructor as this Object - false if
+     *         given Object is not an instance of Course or doesn't contain the same
+     *         name, department, code, section, and instructor as this Object
+     */
 
     @Override
     public boolean equals(Object obj) {
-        return true;
+        if (obj instanceof Course) {
+            Course course = (Course) obj;
+
+            return course.name == name && course.department == department && course.code == code
+                    && course.section == section && course.instructor == instructor;
+        }
+
+        return false;
     }
 
     /**
@@ -257,7 +286,6 @@ class Course {
         return false;
     }
 
-    
     /**
      * Checks whether or not the given Object is a valid section
      * 
