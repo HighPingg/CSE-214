@@ -9,6 +9,12 @@
  */
 
 public class FullPlannerException extends Exception  {
+
+    /**
+     * Constructor that creates a FullPlannerException using s as the message
+     * 
+     * @param s the message to add to the Exception
+     */
     
     public FullPlannerException(String s) {
         super(s);
