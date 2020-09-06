@@ -12,9 +12,6 @@
 class PlannerManager {
 
     public static void main(String[] args) throws IllegalArgumentException {
-        if(Course.validDepartment("sda")){
-            System.out.println("dsad");
-        }
 
         // String str = " a1hmad esma4ili 10";
 
