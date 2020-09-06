@@ -65,7 +65,7 @@ class PlannerManager {
                 }
             } catch (Exception e) {
                 System.out.println("This section isn't valid!");
-            } 
+            }
         } while (!Course.vaildSection(section));
 
         String instructor = "";
@@ -78,7 +78,7 @@ class PlannerManager {
             }
 
         } while (!Course.validInstructor(instructor));
-        
+
         return new Course(name, department, code, section, instructor);
     }
 
@@ -92,7 +92,7 @@ class PlannerManager {
         boolean userQuit = false;
 
         do {
-            //Array of valid inputs to be compared with user input to find a match
+            // Array of valid inputs to be compared with user input to find a match
             String[] validInputs = { "A", "G", "R", "P", "F", "L", "S", "B", "PB", "RB", "Q" };
 
             System.out.println("\n\n(A) Add Course");
@@ -109,21 +109,23 @@ class PlannerManager {
 
             String choice = "";
 
-            // Flag variable: If user input is determined to be valid, this will turn to true.
+            // Flag variable: If user input is determined to be valid, this will turn to
+            // true.
             boolean isValidInput = false;
 
             do {
                 System.out.print("\n\nEnter Your Selection: ");
                 choice = input.nextLine().toUpperCase();
 
-                //comparing the user input with the elements of the accepted answers array until a match is found
+                // comparing the user input with the elements of the accepted answers array
+                // until a match is found
                 for (int i = 0; i < validInputs.length && !isValidInput; i++) {
                     if (choice.equals(validInputs[i])) {
                         isValidInput = true;
                     }
                 }
 
-                //If the user input is invalid, then it repromts the user
+                // If the user input is invalid, then it repromts the user
                 if (!isValidInput) {
                     System.out.println("The selection you have made is invalid. Please enter something else...");
                 }
@@ -133,65 +135,138 @@ class PlannerManager {
             switch (choice) {
                 case "A":
 
-                if(!planner.isFull()){
-                    Course newCourse = userInputCourse(input);
+                    if (!planner.isFull()) {
+                        Course newCourse = userInputCourse(input);
 
-                    int position = 0;
-                    boolean isValidPosition = false;
-                    
-                    do {
-                        System.out.print("Enter position: ");
+                        int position = 0;
+                        boolean isValidPosition = false;
 
-                        String positionIn = input.nextLine();
+                        do {
+                            System.out.print("Enter position: ");
 
-                        try {
-                            position = Integer.parseInt(positionIn);
+                            String positionIn = input.nextLine();
 
-                            planner.addCourse(newCourse, position);
+                            try {
+                                position = Integer.parseInt(positionIn);
 
-                            System.out.println("Course added succesfully...");
-                            isValidPosition = true;
-                        } catch (NumberFormatException e) {
-                            System.out.println("You didn't enter a number!");
-                        } catch (IllegalArgumentException e) {
-                            System.out.println(e.getMessage());
-                        } catch (Exception e) {
-                            System.out.println("Unexpected Error: " + e);
-                        }
+                                planner.addCourse(newCourse, position);
 
-                    } while (!isValidPosition);
-                } else {
-                    System.out.println("The planner is full!");
-                }
+                                System.out.println("Course added succesfully...");
+                                isValidPosition = true;
+                            } catch (NumberFormatException e) {
+                                System.out.println("You didn't enter a number!");
+                            } catch (IllegalArgumentException e) {
+                                System.out.println(e.getMessage());
+                            } catch (Exception e) {
+                                System.out.println("Unexpected Error: " + e);
+                            }
+
+                        } while (!isValidPosition);
+                    } else {
+                        System.out.println("The planner is full!");
+                    }
+
                     break;
 
                 case "G":
-                    
 
+                    if (planner.size() != 0) {
+                        String positionString = "";
+                        boolean isValidPosition = false;
+
+                        do {
+                            System.out.print("Enter a position: ");
+                            positionString = input.nextLine();
+
+                            try {
+                                int position = Integer.parseInt(positionString);
+
+                                Course course = planner.getCourse(position);
+
+                                if (course == null) {
+                                    System.out.println("This position is empty");
+                                } else {
+                                    Planner oneCourse = new Planner();
+                                    oneCourse.addCourse(course);
+                                    oneCourse.printAllCourses();
+                                }
+
+                                isValidPosition = true;
+                            } catch (NumberFormatException e) {
+                                System.out.println("Please enter a number.");
+                            } catch (IllegalArgumentException e) {
+                                System.out.println(e.getMessage());
+                            } catch (Exception e) {
+                                System.out.println("Unexpected Error: " + e);
+                            }
+
+                        } while (!isValidPosition);
+                    } else {
+                        System.out.println("Planner is empty!");
+                    }
 
                     break;
 
                 case "R":
-                    
+                    if (planner.size() != 0) {
+                        String removePositionString = "";
+                        boolean isValidRemovePosition = false;
 
+                        do {
+                            System.out.print("Enter a position: ");
+                            removePositionString = input.nextLine();
+
+                            try {
+                                int position = Integer.parseInt(removePositionString);
+
+                                planner.removeCourse(position);
+
+                                System.out.println(" has been sucessfully removed from the planner.");
+                                isValidRemovePosition = true;
+                            } catch (NumberFormatException e) {
+                                System.out.println("Please enter a number.");
+                            } catch (IllegalArgumentException e) {
+                                System.out.println(e.getMessage());
+                            } catch (Exception e) {
+                                System.out.println("Unexpected Error: " + e);
+                            }
+
+                        } while (!isValidRemovePosition);
+                    } else {
+                        System.out.println("Planner is empty!");
+                    }
 
                     break;
 
                 case "P":
-                    
+
                     planner.printAllCourses();
 
                     break;
 
                 case "F":
-                    
 
+                    String department = "";
+                    do {
+                        System.out.print("Enter department: ");
+                        department = input.nextLine();
+
+                        if (!Course.validDepartment(department)) {
+                            System.out.println("This department isn't valid!");
+                        }
+
+                    } while (!Course.validDepartment(department));
+
+                    Planner.filter(planner, department);
 
                     break;
 
                 case "L":
-                    
+                    Course course = userInputCourse(input);
 
+                    int location = planner.locate(course);
+
+                    System.out.println(" was found in planner at position " + (location + 1));
 
                     break;
 
@@ -202,7 +277,7 @@ class PlannerManager {
                 case "B":
                     backup = (Planner) planner.clone();
 
-                    System.out.println("\nlanner Successfully Backed Up...\n");
+                    System.out.println("\nPlanner Successfully Backed Up...\n");
                     break;
 
                 case "PB":

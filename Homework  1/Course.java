@@ -217,8 +217,8 @@ class Course {
         if (obj instanceof Course) {
             Course course = (Course) obj;
 
-            return course.name == name && course.department == department && course.code == code
-                    && course.section == section && course.instructor == instructor;
+            return course.name.equals(name) && course.department.equals(department) && course.code == code
+                    && course.section == section && course.instructor.equals(instructor);
         }
 
         return false;

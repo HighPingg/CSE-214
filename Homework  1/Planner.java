@@ -114,7 +114,7 @@ class Planner {
      * @param position the position to remove the course from
      * 
      * @throws IllegalArgumentException thrown if position is out of bounds (not
-     *                                  between 1 - MAX_COURSES)
+     *                                  between 1 - MAX_COURSES) or is empty/null
      */
 
     public void removeCourse(int position) throws IllegalArgumentException {
@@ -122,10 +122,18 @@ class Planner {
             throw new IllegalArgumentException("The entered position is out-of-bounds");
         }
 
-        for (int i = position - 1; i < courseCount; i++) {
+        if (position > courseCount) {
+            throw new IllegalArgumentException("There is nothing in this position!");
+        }
+
+        // stop 1 before otherwise it will go out of bounds
+
+        for (int i = position - 1; i < courseCount - 1; i++) {
             courses[i] = courses[i + 1];
         }
 
+        // set last one to null
+        courses[courseCount - 1] = null;
         courseCount--;
     }
 
@@ -165,6 +173,26 @@ class Planner {
         }
 
         return false;
+    }
+
+    /**
+     * Locates the first Course in courses that equals a given course
+     * 
+     * @param course The course that we look through courses to find a match for
+     * 
+     * @return -1 if there are no matches to the given course, the index of the
+     *         first match in courses
+     */
+
+    public int locate(Course course) {
+        for (int i = 0; i < courseCount; i++) {
+            System.out.println(i + " " + course.equals(courses[i]));
+            if (course.equals(courses[i])) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 
     /**
@@ -240,7 +268,8 @@ class Planner {
 
         Planner filteredPlanner = new Planner();
 
-        for (int i = 0; i < planner.courseCount; i++) {
+        for (int i = 1; i <= planner.size(); i++) {
+            System.out.println(i);
             if (planner.getCourse(i).getDepartment().equals(department)) {
                 try {
                     filteredPlanner.addCourse(planner.getCourse(i));
