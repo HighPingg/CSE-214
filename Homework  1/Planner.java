@@ -10,7 +10,7 @@
 
 class Planner {
 
-    private final static int MAX_COURSES = 50;
+    private final static int MAX_COURSES = 5;
 
     // Keeps track total number of courses inside the array. Initialized as 0, but
     // changed inside the addCourse and removeCourse methods
@@ -33,6 +33,21 @@ class Planner {
 
     public int size() {
         return courseCount;
+    }
+
+    /**
+     * Determines whether or not the courses array is fully populated or not
+     * 
+     * @return - true if the array is completely filled - false if not all spaces in
+     *         the courses array is filled
+     */
+
+    public boolean isFull() {
+        if (courseCount == MAX_COURSES) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -235,6 +250,7 @@ class Planner {
             }
         }
 
+        filteredPlanner.printAllCourses();
     }
 
     /**
@@ -253,7 +269,7 @@ class Planner {
 
     @Override
     public String toString() {
-        String top = String.format("%3s %25s %10s %4s %7s %s", "No.", "Course Name", "Department", "Code", "Section",
+        String top = String.format("%3s %-25s %-10s %4s %7s %s", "No.", "Course Name", "Department", "Code", "Section",
                 "Instructor");
         String line = "-------------------------------------------------------------------------------";
         String coursesString = "";
@@ -261,7 +277,7 @@ class Planner {
         for (int i = 0; i < courseCount; i++) {
             Course course = courses[i];
 
-            coursesString += String.format("%-3d %25s %10s %-4s %-7d %s\n", i + 1, course.getName(),
+            coursesString += String.format("%3d %-25s %-10s %4s %7d %s\n", i + 1, course.getName(),
                     course.getDepartment(), course.getCode(), course.getSection(), course.getInstructor());
         }
 
