@@ -126,6 +126,9 @@ class Planner {
             throw new IllegalArgumentException("There is nothing in this position!");
         }
 
+        System.out.println(courses[position - 1].getDepartment() + " " + courses[position - 1].getCode() + "."
+                + courses[position - 1].getSection() + " has been sucessfully removed from the planner.");
+
         // stop 1 before otherwise it will go out of bounds
 
         for (int i = position - 1; i < courseCount - 1; i++) {

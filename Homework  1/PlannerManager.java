@@ -192,7 +192,8 @@ class PlannerManager {
                                 planner.addCourse(newCourse, position);
 
                                 // set isValidPosition to true to stop the loop
-                                System.out.println("Course added succesfully...");
+                                System.out.println(newCourse.getDepartment() + " " + newCourse.getCode() + "."
+                                        + newCourse.getSection() + " has been sucessfully added to the planner.");
                                 isValidPosition = true;
                             } catch (NumberFormatException e) {
                                 System.out.println("You didn't enter a number!");
@@ -292,7 +293,6 @@ class PlannerManager {
                                 planner.removeCourse(position);
 
                                 // set isValidRemovePosition to true to stop the loop
-                                System.out.println(" has been sucessfully removed from the planner.");
                                 isValidRemovePosition = true;
                             } catch (NumberFormatException e) {
                                 System.out.println("Please enter a number.");
@@ -354,9 +354,11 @@ class PlannerManager {
                     // course is found
 
                     if (location == -1) {
-                        System.out.println(" was not found in the planner");
+                        System.out.println(course.getDepartment() + " " + course.getCode() + "." + course.getSection()
+                                + " was not found in the planner");
                     } else {
-                        System.out.println(" was found in planner at position " + (location + 1));
+                        System.out.println(course.getDepartment() + " " + course.getCode() + "." + course.getSection()
+                                + " was found in planner at position " + (location + 1));
                     }
 
                     break;
