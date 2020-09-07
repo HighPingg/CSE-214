@@ -19,6 +19,7 @@ class Planner {
     private int courseCount;
 
     // Initializes this Planner with an empty array of courses and totalCourses = 0
+    // postcondition: This Planner has been initialized to an empty list of Courses.
 
     public Planner() {
         courses = new Course[MAX_COURSES];
@@ -29,6 +30,8 @@ class Planner {
      * Return the total number of Courses inside the course array
      * 
      * @return courseCount (the total number of Courses inside the array)
+     * 
+     * @precondition - This Planner has been instatiated.
      */
 
     public int size() {
@@ -40,6 +43,8 @@ class Planner {
      * 
      * @return - true if the array is completely filled - false if not all spaces in
      *         the courses array is filled
+     * 
+     * @precondition This Planner has been instantiated.
      */
 
     public boolean isFull() {
@@ -57,6 +62,14 @@ class Planner {
      * 
      * @throws FullPlannerException Thrown if the current size of the array +
      *                              newCourse would overflow out of array bounds
+     * 
+     * @precondition This Course object has been instantiated and 1 ≤ position ≤
+     *               items_currently_in_list + 1. The number of Course objects in
+     *               this Planner is less than MAX_COURSES.
+     * 
+     * @postcondition The new Course is now listed in the correct preference on the
+     *                list. All Courses that were originally greater than or equal
+     *                to position are moved back one position.
      */
 
     public void addCourse(Course newCourse) throws FullPlannerException {
@@ -115,6 +128,13 @@ class Planner {
      * 
      * @throws IllegalArgumentException thrown if position is out of bounds (not
      *                                  between 1 - MAX_COURSES) or is empty/null
+     * 
+     * @preconditions This Planner has been instantiated and 1 ≤ position ≤
+     *                items_currently_in_list.
+     * 
+     * @postconditions The Course at the desired position has been removed. All
+     *                 Courses that were originally greater than or equal to
+     *                 position are moved backward one position.
      */
 
     public void removeCourse(int position) throws IllegalArgumentException {
@@ -149,6 +169,9 @@ class Planner {
      * 
      * @throws IllegalArgumentException thrown if position is out of bounds (not
      *                                  between 1 - MAX_COURSES)
+     * 
+     * @preconditions The Planner object has been instantiated and 1 ≤ position ≤
+     *                items_currenyly_in_list.
      */
 
     public Course getCourse(int position) throws IllegalArgumentException {
@@ -202,6 +225,8 @@ class Planner {
      * Returns a clone of this PLanner class
      * 
      * @return a cloned copy of this Planner class
+     * 
+     * @preconditions This Planner object has been instantiated.
      */
 
     @Override
@@ -259,6 +284,11 @@ class Planner {
      * 
      * @throws IllegalArgumentException thrown when the given department is an
      *                                  invalid input
+     * 
+     * @preconditions This Planner object has been instantiated.
+     * 
+     * @postconditions Displays a neatly formatted table of each course filtered
+     *                 from the Planner. Keep the preference numbers the same.
      */
 
     public static void filter(Planner planner, String department) throws IllegalArgumentException {
@@ -287,6 +317,11 @@ class Planner {
 
     /**
      * Print all elements in the courses array using .toString()
+     * 
+     * @preconditions This Planner has been instantiated.
+     * 
+     * @postconditions Displats a neatly formatted table of each course from the
+     *                 Planner.
      */
 
     public void printAllCourses() {
