@@ -1,4 +1,9 @@
 /**
+ * Planner class holds an array of courses and contains methods for functions
+ * with the Courses, such as add, remove, filter, size, isFull, get, equals,
+ * locate and equals. Also holds a count of the total number of Courses in the
+ * array, changed every time a Course is added or removed.
+ * 
  * @author Vincent Zheng
  * @solar_ID - 113469839
  * @email - vincent.zheng@stonybrook.edu
@@ -10,16 +15,23 @@
 
 class Planner {
 
-    private final static int MAX_COURSES = 5;
+    //maximum amount of courses allowed in the array
 
-    // Keeps track total number of courses inside the array. Initialized as 0, but
-    // changed inside the addCourse and removeCourse methods
+    private final static int MAX_COURSES = 50;
+
+    // Keeps track total number of courses inside the array. Initialized as 0,
+    // but changed inside the addCourse and removeCourse methods
 
     private Course[] courses;
     private int courseCount;
 
-    // Initializes this Planner with an empty array of courses and totalCourses = 0
-    // postcondition: This Planner has been initialized to an empty list of Courses.
+    /**
+     * Initializes this Planner with an empty array of courses and
+     * totalCourses = 0
+     *
+     * postcondition: This Planner has been initialized to an empty list of 
+     * Courses.
+     */
 
     public Planner() {
         courses = new Course[MAX_COURSES];
@@ -41,8 +53,8 @@ class Planner {
     /**
      * Determines whether or not the courses array is fully populated or not
      * 
-     * @return - true if the array is completely filled - false if not all spaces in
-     *         the courses array is filled
+     * @return - true if the array is completely filled - false if not all
+     *         spaces in the courses array is filled
      * 
      * @precondition This Planner has been instantiated.
      */
@@ -62,19 +74,12 @@ class Planner {
      * 
      * @throws FullPlannerException Thrown if the current size of the array +
      *                              newCourse would overflow out of array bounds
-     * 
-     * @precondition This Course object has been instantiated and 1 ≤ position ≤
-     *               items_currently_in_list + 1. The number of Course objects in
-     *               this Planner is less than MAX_COURSES.
-     * 
-     * @postcondition The new Course is now listed in the correct preference on the
-     *                list. All Courses that were originally greater than or equal
-     *                to position are moved back one position.
      */
 
     public void addCourse(Course newCourse) throws FullPlannerException {
         if (size() + 1 > MAX_COURSES) {
-            throw new FullPlannerException("There isn't enough space in the Planner");
+            throw new FullPlannerException(
+                "There isn't enough space in the Planner");
         }
 
         courses[courseCount] = newCourse;
@@ -83,8 +88,7 @@ class Planner {
 
     /**
      * Adds a given newCourse to the given position of the array and pushes all
-     * elements back 1 index. If the position > the elements in the array, then adds
-     * to the back of the last element
+     * elements back 1 index.
      * 
      * @param newCourse The course to be added into the courses array
      * 
@@ -94,20 +98,34 @@ class Planner {
      *                                  array to fit the newCourse
      * 
      * @throws IllegalArgumentException thrown if position is out of bounds (not
-     *                                  between 1 - MAX_COURSES)
+     *                                  between 1 - courseCount)
+     * 
+     * @precondition This Course object has been instantiated and 1 ≤ position ≤
+     *               items_currently_in_list + 1. The number of Course objects
+     *               in this Planner is less than MAX_COURSES.
+     * 
+     * @postcondition The new Course is now listed in the correct preference on 
+     *                the list. All Courses that were originally greater than or
+     *                equal to position are moved back one position.
      */
 
-    public void addCourse(Course newCourse, int position) throws FullPlannerException, IllegalArgumentException {
+    public void addCourse(Course newCourse, int position)
+                        throws FullPlannerException, IllegalArgumentException 
+    {
         if (size() + 1 > MAX_COURSES) {
-            throw new FullPlannerException("There isn't enough space in the Planner");
+            throw new FullPlannerException(
+                            "There isn't enough space in the Planner");
         }
 
-        if (position < 1 || position > MAX_COURSES) {
-            throw new IllegalArgumentException("The entered position is out-of-bounds");
+        if (position < 1 || position > courseCount + 1) {
+            throw new IllegalArgumentException(
+                            "The entered position is out-of-bounds");
         }
 
-        // if the desired position is higher than the amount of courses, then add them
-        // to courses[courseCount] using the addCourse(newCourse) method
+        // if the desired position is higher than the amount of courses, then
+        // add them to courses[courseCount] using the addCourse(newCourse)
+        // method
+
         if (position > courseCount) {
             addCourse(newCourse);
         } else {
@@ -127,7 +145,8 @@ class Planner {
      * @param position the position to remove the course from
      * 
      * @throws IllegalArgumentException thrown if position is out of bounds (not
-     *                                  between 1 - MAX_COURSES) or is empty/null
+     *                                  between 1 - courseCount) or is 
+     *                                  empty/null
      * 
      * @preconditions This Planner has been instantiated and 1 ≤ position ≤
      *                items_currently_in_list.
@@ -138,16 +157,16 @@ class Planner {
      */
 
     public void removeCourse(int position) throws IllegalArgumentException {
-        if (position < 1 || position > MAX_COURSES) {
-            throw new IllegalArgumentException("The entered position is out-of-bounds");
+        if (position < 1 || position > courseCount) {
+            throw new IllegalArgumentException(
+                                "The entered position is out-of-bounds");
         }
 
-        if (position > courseCount) {
-            throw new IllegalArgumentException("There is nothing in this position!");
-        }
-
-        System.out.println(courses[position - 1].getDepartment() + " " + courses[position - 1].getCode() + "."
-                + courses[position - 1].getSection() + " has been sucessfully removed from the planner.");
+        System.out.printf(
+                "%s %d.%02d has been sucessfully added to the planner.",
+                courses[position - 1].getDepartment(),
+                courses[position - 1].getCode(),
+                courses[position - 1].getSection());
 
         // stop 1 before otherwise it will go out of bounds
 
@@ -170,20 +189,22 @@ class Planner {
      * @throws IllegalArgumentException thrown if position is out of bounds (not
      *                                  between 1 - MAX_COURSES)
      * 
-     * @preconditions The Planner object has been instantiated and 1 ≤ position ≤
-     *                items_currenyly_in_list.
+     * @preconditions The Planner object has been instantiated and 1 ≤ position 
+     *                ≤ items_currenyly_in_list.
      */
 
     public Course getCourse(int position) throws IllegalArgumentException {
-        if (position < 1 || position > MAX_COURSES) {
-            throw new IllegalArgumentException("The entered position is out-of-bounds");
+        if (position < 1 || position > courseCount) {
+            throw new IllegalArgumentException(
+                                "The entered position is out-of-bounds");
         }
 
         return courses[position - 1];
     }
 
     /**
-     * Checks whether or not a given Course already exists inside the courses array
+     * Checks whether or not a given Course already exists inside the courses 
+     * array
      * 
      * @param course the course to match with a course inside the courses array
      * 
@@ -212,7 +233,7 @@ class Planner {
 
     public int locate(Course course) {
         for (int i = 0; i < courseCount; i++) {
-            System.out.println(i + " " + course.equals(courses[i]));
+
             if (course.equals(courses[i])) {
                 return i;
             }
@@ -249,10 +270,10 @@ class Planner {
      * 
      * @param obj the object that is being compared to this planner
      * 
-     * @return - true if object is a Planner and contains the same courses and same
-     *         size of courses - false if object isn't a Planner or if its courses
-     *         aren't the same as this planner's courses, or if the object's size
-     *         doesn't match this one's
+     * @return - true if object is a Planner and contains the same courses and
+     *         same size of courses - false if object isn't a Planner or if its
+     *         courses aren't the same as this planner's courses, or if the
+     *         object's size doesn't match this one's
      */
 
     @Override
@@ -291,28 +312,38 @@ class Planner {
      *                 from the Planner. Keep the preference numbers the same.
      */
 
-    public static void filter(Planner planner, String department) throws IllegalArgumentException {
+    public static void filter(Planner planner, String department)
+                throws IllegalArgumentException 
+    {
         if (!Course.validDepartment(department)) {
             throw new IllegalArgumentException("Invalid department");
         }
 
-        // Iterates through all elements in array, if departments match, add it
-        // to filteredPlanner, then use the .printAllCourses() method
+        // Planner heading
 
-        Planner filteredPlanner = new Planner();
+        System.out.printf("%3s %-25s %-10s %4s %7s %s\n", "No.", "Course Name",
+                            "Department", "Code", "Section",
+                "Instructor");
+        System.out.println("---------------------------------------------------"
+                            + "----------------------------");
+
+        // Iterates through all elements in array, if departments match, then
+        // print it
 
         for (int i = 1; i <= planner.size(); i++) {
-            System.out.println(i);
-            if (planner.getCourse(i).getDepartment().equals(department)) {
-                try {
-                    filteredPlanner.addCourse(planner.getCourse(i));
-                } catch (Exception e) {
-                    System.out.println(e + ": " + e.getMessage());
-                }
-            }
-        }
 
-        filteredPlanner.printAllCourses();
+            Course course = planner.getCourse(i);
+
+            if (course.getDepartment().equals(department)) {
+
+                System.out.printf("%3d %-25s %-10s %4d      %02d %s\n", i,
+                                course.getName(), course.getDepartment(),
+                                course.getCode(), course.getSection(),
+                                course.getInstructor());
+
+            }
+
+        }
     }
 
     /**
@@ -336,16 +367,23 @@ class Planner {
 
     @Override
     public String toString() {
-        String top = String.format("%3s %-25s %-10s %4s %7s %s", "No.", "Course Name", "Department", "Code", "Section",
-                "Instructor");
-        String line = "-------------------------------------------------------------------------------";
+        // title
+        String top = String.format("%3s %-25s %-10s %4s %7s %s", "No.",
+            "Course Name", "Department", "Code", "Section", "Instructor");
+        String line = "--------------------------------------------------------"
+                        + "-----------------------";
+
+        // adding all Courses in order using format
+
         String coursesString = "";
 
         for (int i = 0; i < courseCount; i++) {
             Course course = courses[i];
 
-            coursesString += String.format("%3d %-25s %-10s %4s %7d %s\n", i + 1, course.getName(),
-                    course.getDepartment(), course.getCode(), course.getSection(), course.getInstructor());
+            coursesString += String.format("%3d %-25s %-10s %4d      %02d %s\n",
+                        i + 1, course.getName(), course.getDepartment(), 
+                        course.getCode(), course.getSection(),
+                        course.getInstructor());
         }
 
         return top + "\n" + line + "\n" + coursesString;

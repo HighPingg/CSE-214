@@ -1,4 +1,7 @@
 /**
+ * Course class holding all the variables necessary for a valid Course. Contains
+ * all getters, setters, valid variable checkers, clone and equals method.
+ * 
  * @author Vincent Zheng
  * @solar_ID - 113469839
  * @email - vincent.zheng@stonybrook.edu
@@ -10,6 +13,8 @@
 
 class Course {
 
+    //All thhe variables required for this to be a valid Course
+
     private String name;
     private String department;
     private int code;
@@ -17,8 +22,8 @@ class Course {
     private String instructor;
 
     /**
-     * Creates a new Course using the parameters and checks whether or not inputs
-     * are valid using the static valid checkers
+     * Creates a new Course using the parameters and checks whether or not 
+     * inputs are valid using the static valid checkers
      * 
      * @param name       The String to set name to.
      * @param department The String to set department to.
@@ -27,11 +32,16 @@ class Course {
      * @param instructor The String to set instructor to.
      * 
      * @throws IllegalArgumentException Thrown if given parameters aren't valid
-     *                                  inputs and fails the static check methods
+     *                                  inputs and fails the static check
+     *                                  methods
+     * 
+     * postcondition: This Course has been initialized with valid variables
+     *                given in the constructor 
      */
 
-    public Course(String name, String department, int code, byte section, String instructor)
-            throws IllegalArgumentException {
+    public Course(String name, String department, int code, byte section, 
+                String instructor) throws IllegalArgumentException 
+    {
 
         if (!validName(name))
             throw new IllegalArgumentException("Input name invalid");
@@ -47,6 +57,9 @@ class Course {
 
         if (!validInstructor(instructor))
             throw new IllegalArgumentException("Input instructor invalid");
+
+        // Only creates this object if all the variables are valid. Use the
+        // valid checkers to check for validity
 
         this.name = name;
         this.department = department;
@@ -127,11 +140,13 @@ class Course {
      * 
      * @param department The String to set the name of this object to
      * 
-     * @throws IllegalArgumentException Thrown if the provided department is empty
-     *                                  and doesn't contain only letters and spaces
+     * @throws IllegalArgumentException Thrown if the provided department is
+     *                                  empty and doesn't contain only letters
+     *                                  and spaces
      */
 
-    public void setDepartment(String department) throws IllegalArgumentException {
+    public void setDepartment(String department) throws IllegalArgumentException
+    {
         if (validDepartment(department)) {
             this.department = department;
         } else {
@@ -160,7 +175,8 @@ class Course {
      * 
      * @param section The byte to set the section of this object to
      * 
-     * @throws IllegalArgumentException Thrown if the provided section is negative
+     * @throws IllegalArgumentException Thrown if the provided section is 
+     *                                  negative
      */
 
     public void setSection(byte section) throws IllegalArgumentException {
@@ -176,11 +192,13 @@ class Course {
      * 
      * @param name The String to set the instructor of this object to
      * 
-     * @throws IllegalArgumentException Thrown if the provided instructor is empty
-     *                                  and doesn't contain only letters and spaces
+     * @throws IllegalArgumentException Thrown if the provided instructor is
+     *                                  empty and doesn't contain only letters
+     *                                  and spaces
      */
 
-    public void setInstructor(String instructor) throws IllegalArgumentException {
+    public void setInstructor(String instructor) throws IllegalArgumentException
+    {
         if (validDepartment(instructor)) {
             this.instructor = instructor;
         } else {
@@ -193,6 +211,9 @@ class Course {
      * 
      * @return a new clone of this object using the current values of name,
      *         department, code, section, and instructor
+     * 
+     * preCondition: This Course is instantialted with valid name, department,
+     *               code, section, and instructor.
      */
 
     @Override
@@ -207,9 +228,10 @@ class Course {
      *            Object
      * 
      * @return - true if given Object is a Course and contains the same name,
-     *         department, code, section, and instructor as this Object - false if
-     *         given Object is not an instance of Course or doesn't contain the same
-     *         name, department, code, section, and instructor as this Object
+     *         department, code, section, and instructor as this Object - false 
+     *         if given Object is not an instance of Course or doesn't contain 
+     *         the same name, department, code, section, and instructor as this
+     *         Object
      */
 
     @Override
@@ -217,8 +239,10 @@ class Course {
         if (obj instanceof Course) {
             Course course = (Course) obj;
 
-            return course.name.equals(name) && course.department.equals(department) && course.code == code
-                    && course.section == section && course.instructor.equals(instructor);
+            return course.name.equals(name) && 
+                    course.department.equals(department) && course.code == code
+                    && course.section == section && 
+                    course.instructor.equals(instructor);
         }
 
         return false;
@@ -227,19 +251,22 @@ class Course {
     /**
      * Checks whether or not the given Object is a valid name
      * 
-     * @param obj The Object that needs to be checked whether or not it is a valid
-     *            name
+     * @param obj The Object that needs to be checked whether or not it is a
+     *            valid name
      * 
-     * @return - true if Object is a String, only contains letters and spaces, and
-     *         isn't empty - false if Object isn't a String, contains characters
-     *         other than letters and spaces, or is empty
+     * @return - true if Object is a String, only contains letters and spaces,
+     *         and isn't empty or is less than 25 characters in length - false
+     *         if Object isn't a String, contains characters other than letters
+     *         and spaces, or is empty or is greater than 25 characters in
+     *         length
      */
 
     public static boolean validName(Object obj) {
         if (obj instanceof String) {
             String name = (String) obj;
 
-            return name.matches("[a-zA-z ]*") && name.length() != 0;
+            return name.matches("[a-zA-z ]*") && name.length() != 0 && 
+                    name.length() <= 25;
         }
 
         return false;
@@ -248,19 +275,21 @@ class Course {
     /**
      * Checks whether or not the given Object is a valid department
      * 
-     * @param obj The Object that needs to be checked whether or not it is a valid
-     *            department
+     * @param obj The Object that needs to be checked whether or not it is a 
+     *            valid department
      * 
      * @return - true if Object is a String, only contains capital letters, and
      *         isn't empty - false if Object isn't a String, contains characters
-     *         other than capital letters, or is empty
+     *         other than capital letters, or is not 3 letters in length
      */
 
-    public static boolean validDepartment(Object obj) throws IllegalArgumentException {
+    public static boolean validDepartment(Object obj)
+        throws IllegalArgumentException 
+    {
         if (obj instanceof String) {
             String department = (String) obj;
 
-            return department.matches("[A-Z]*") && department.length() != 0;
+            return department.matches("[A-Z]*") && department.length() == 3;
         }
 
         return false;
@@ -269,18 +298,18 @@ class Course {
     /**
      * Checks whether or not the given Object is a valid code
      * 
-     * @param obj The Object that needs to be checked whether or not it is a valid
-     *            code
+     * @param obj The Object that needs to be checked whether or not it is a
+     *            valid code
      * 
-     * @return - true if Object is an Integer and is not negative - false if object
-     *         isn't an Integer or is negative
+     * @return - true if Object is an Integer and isn't 3 digits - false if
+     *         object isn't an Integer or isn't 3 digits
      */
 
     public static boolean validCode(Object obj) {
         if (obj instanceof Integer) {
             int code = (int) obj;
 
-            return code >= 0;
+            return code >= 100 && code < 1000;
         }
 
         return false;
@@ -289,18 +318,18 @@ class Course {
     /**
      * Checks whether or not the given Object is a valid section
      * 
-     * @param obj The Object that needs to be checked whether or not it is a valid
-     *            section
+     * @param obj The Object that needs to be checked whether or not it is a 
+     *            valid section
      * 
-     * @return - true if Object is a Byte and is not negative - false if object
-     *         isn't a Byte or is negative
+     * @return - true if Object is a Byte and is 1 or 2 digits - false if object
+     *         isn't a Byte or isn't 1 or 2 digits
      */
 
     public static boolean vaildSection(Object obj) {
         if (obj instanceof Byte) {
             byte section = (byte) obj;
 
-            return section >= 0;
+            return section >= 0 && section < 100;
         }
 
         return false;
@@ -309,19 +338,22 @@ class Course {
     /**
      * Checks whether or not the given Object is a valid instructor
      * 
-     * @param obj The Object that needs to be checked whether or not it is a valid
-     *            instructor
+     * @param obj The Object that needs to be checked whether or not it is a
+     *            valid instructor
      * 
-     * @return - true if Object is a String, only contains letters and spaces, and
-     *         isn't empty - false if Object isn't a String, contains characters
-     *         other than letters and spaces, or is empty
+     * @return - true if Object is a String, only contains letters and spaces,
+     *         and isn't empty or is less than 25 characters in length - false
+     *         if Object isn't a String, contains characters other than letters
+     *         and spaces, or is empty or is greater than 25 characters in 
+     *         length
      */
 
     public static boolean validInstructor(Object obj) {
         if (obj instanceof String) {
             String instructor = (String) obj;
 
-            return instructor.matches("[a-zA-z ]*") && instructor.length() != 0;
+            return instructor.matches("[a-zA-z ]*") && instructor.length() != 0 
+                    && instructor.length() <= 25;
         }
 
         return false;

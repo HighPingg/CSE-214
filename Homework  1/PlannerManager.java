@@ -14,92 +14,84 @@ class PlannerManager {
 
     /**
      * Creates a new Course depending on user inputs and checks the validity of
-     * these inputs. If they aren't valid, then reprompts the user.
+     * these inputs. If they aren't valid, then thorws an error.
      * 
      * @param input input stream to take user inputs from
      * 
      * @return a new Course with the valid user defined variables
+     * 
+     * preCondition: input is a valid input stream
      */
 
-    public static Course userInputCourse(Scanner input) {
+    public static Course userInputCourse(Scanner input)
+        throws IllegalArgumentException {
 
-        // gets the name of the new course and reprompt until entered name is valid
+        // gets the name of the new course and checks if entered name is valid
 
-        String name = "";
-        do {
-            System.out.print("Enter course name: ");
-            name = input.nextLine();
+        String name;
+        System.out.print("Enter course name: ");
+        name = input.nextLine();
 
-            if (!Course.validName(name)) {
-                System.out.println("This name isn't valid!");
+        if (!Course.validName(name)) {
+            throw new IllegalArgumentException("This name isn't valid!");
+        }
+
+        // gets the department of the new course and checks if entered
+        // department is valid
+
+        String department;
+        System.out.print("Enter department: ");
+        department = input.nextLine();
+
+        if (!Course.validDepartment(department)) {
+            throw new IllegalArgumentException("This department isn't valid!");
+        }
+
+        // gets the code of the new course and checks if entered code is valid
+
+        int code;
+        System.out.print("Enter course code: ");
+        String codeIn = input.nextLine();
+
+        try {
+            code = Integer.parseInt(codeIn);
+
+            if (!Course.validCode(code)) {
+                throw new IllegalArgumentException("This code isn't valid!");
             }
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("This code isn't valid!");
+        }
 
-        } while (!Course.validName(name));
-
-        // gets the department of the new course and reprompt until entered department
-        // is valid
-
-        String department = "";
-        do {
-            System.out.print("Enter department: ");
-            department = input.nextLine();
-
-            if (!Course.validDepartment(department)) {
-                System.out.println("This department isn't valid!");
-            }
-
-        } while (!Course.validDepartment(department));
-
-        // gets the code of the new course and reprompt until entered code is valid
-
-        int code = -1;
-        do {
-            System.out.print("Enter course code: ");
-            String codeIn = input.nextLine();
-
-            try {
-                code = Integer.parseInt(codeIn);
-
-                if (!Course.validCode(code)) {
-                    System.out.println("This code isn't valid!");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("This code isn't valid!");
-            }
-        } while (!Course.validCode(code));
-
-        // gets the section of the new course and reprompt until entered section is
+        // gets the section of the new course and checks if entered section is
         // valid
 
-        byte section = -1;
-        do {
-            System.out.print("Enter course section: ");
-            String sectionIn = input.nextLine();
+        byte section;
 
-            try {
-                section = (byte) Integer.parseInt(sectionIn);
+        System.out.print("Enter course section: ");
+        String sectionIn = input.nextLine();
 
-                if (!Course.vaildSection(section)) {
-                    System.out.println("This section isn't valid!");
-                }
-            } catch (Exception e) {
-                System.out.println("This section isn't valid!");
+        try {
+            section = (byte) Integer.parseInt(sectionIn);
+
+            if (!Course.vaildSection(section)) {
+                throw new IllegalArgumentException("This section isn't valid!");
             }
-        } while (!Course.vaildSection(section));
+        } catch (Exception e) {
+            throw new IllegalArgumentException("This section isn't valid!");
+        }
 
-        // gets the instructor of the new course and reprompt until entered instructor
-        // is valid
+        // gets the instructor of the new course and checks if entered
+        // instructor is valid
 
         String instructor = "";
-        do {
-            System.out.print("Enter instructor name: ");
-            instructor = input.nextLine();
 
-            if (!Course.validInstructor(instructor)) {
-                System.out.println("This name isn't valid!");
-            }
+        System.out.print("Enter instructor name: ");
+        instructor = input.nextLine();
 
-        } while (!Course.validInstructor(instructor));
+        if (!Course.validInstructor(instructor)) {
+            throw new IllegalArgumentException("This instructor isn't valid!");
+        }
 
         // return new course object using the given valid user inputs
 
@@ -117,8 +109,10 @@ class PlannerManager {
         boolean userQuit = false;
 
         do {
-            // Array of valid inputs to be compared with user input to find a match
-            String[] validInputs = { "A", "G", "R", "P", "F", "L", "S", "B", "PB", "RB", "Q" };
+            // Array of valid inputs to be compared with user input to find a
+            // match
+            String[] validInputs = { "A", "G", "R", "P", "F", "L", "S", "B",
+                                    "PB", "RB", "Q" };
 
             System.out.println("\n\n(A) Add Course");
             System.out.println("(G) Get Course");
@@ -134,16 +128,16 @@ class PlannerManager {
 
             String choice = "";
 
-            // Flag variable: If user input is determined to be valid, this will turn to
-            // true.
+            // Flag variable: If user input is determined to be valid, this will
+            // turn to true.
             boolean isValidInput = false;
 
             do {
                 System.out.print("\n\nEnter Your Selection: ");
                 choice = input.nextLine().toUpperCase();
 
-                // comparing the user input with the elements of the accepted answers array
-                // until a match is found
+                // comparing the user input with the elements of the accepted
+                // answers array until a match is found
                 for (int i = 0; i < validInputs.length && !isValidInput; i++) {
                     if (choice.equals(validInputs[i])) {
                         isValidInput = true;
@@ -152,7 +146,8 @@ class PlannerManager {
 
                 // If the user input is invalid, then it repromts the user
                 if (!isValidInput) {
-                    System.out.println("The selection you have made is invalid. Please enter something else...");
+                    System.out.println("The selection you have made is invalid."
+                            + " Please enter something else...");
                 }
 
             } while (!isValidInput);
@@ -162,48 +157,48 @@ class PlannerManager {
             switch (choice) {
                 case "A":
 
-                    // check if the planner is full using the .isFull() method. If isFull() == true,
-                    // then tells user planner is full and go back to menu
+                    // check if the planner is full using the .isFull() method.
+                    // If isFull() == true, then tells user planner is full and
+                    // go back to menu
 
                     if (!planner.isFull()) {
 
                         // get newCourse using the user input function
+                        Course newCourse;
 
-                        Course newCourse = userInputCourse(input);
+                        try {
+                            newCourse = userInputCourse(input);
 
-                        // gets the position using a do while loop and a flag variable. If the position
-                        // is valid and addCourse doesn't throw an Exception, then isValidPosition is
-                        // set to true and the loop will end
+                            // gets the position
 
-                        int position = 0;
-                        boolean isValidPosition = false;
-
-                        do {
+                            int position;
                             System.out.print("Enter position: ");
-
                             String positionIn = input.nextLine();
 
-                            try {
-                                // Coverts the input to an Integer if possible
-                                // NumberFormatException is thrown here if user doesn't enter an integer
-                                position = Integer.parseInt(positionIn);
+                            // Coverts the input to an Integer if possible
+                            // NumberFormatException is thrown here if user
+                            // doesn't enter an integer
+                            position = Integer.parseInt(positionIn);
 
-                                // IllegalArgumentException is thrown here if position is out of bounds
-                                planner.addCourse(newCourse, position);
+                            // IllegalArgumentException is thrown here if
+                            // position is out of bounds
+                            planner.addCourse(newCourse, position);
 
-                                // set isValidPosition to true to stop the loop
-                                System.out.println(newCourse.getDepartment() + " " + newCourse.getCode() + "."
-                                        + newCourse.getSection() + " has been sucessfully added to the planner.");
-                                isValidPosition = true;
-                            } catch (NumberFormatException e) {
-                                System.out.println("You didn't enter a number!");
-                            } catch (IllegalArgumentException e) {
-                                System.out.println(e.getMessage());
-                            } catch (Exception e) {
-                                System.out.println("Unexpected Error: " + e);
-                            }
+                            // set isValidPosition to true to stop the loop
+                            System.out.printf("%s %d.%02d has been sucessfully"
+                                            + " added to the planner.",
+                                    newCourse.getDepartment(),
+                                    newCourse.getCode(),
+                                    newCourse.getSection());
 
-                        } while (!isValidPosition);
+                        } catch (NumberFormatException e) {
+                            System.out.println("You didn't enter a number!");
+                        } catch (IllegalArgumentException e) {
+                            System.out.println(e.getMessage());
+                        } catch (Exception e) {
+                            System.out.println("Unexpected Error: " + e);
+                        }
+
                     } else {
                         System.out.println("The planner is full!");
                     }
@@ -212,53 +207,64 @@ class PlannerManager {
 
                 case "G":
 
-                    // check if the planner is empty using the size() method. If size() == 0,
-                    // then tells user planner is empty and go back to menu
+                    // check if the planner is empty using the size() method. If
+                    // size() == 0, then tells user planner is empty and go back
+                    // to menu
 
                     if (planner.size() != 0) {
 
-                        // gets the position using a do while loop and a flag variable. If the position
-                        // is valid and getCourse doesn't throw an Exception, then isValidPosition is
-                        // set to true and the loop will end
+                        // gets the position
 
-                        String positionString = "";
-                        boolean isValidPosition = false;
+                        String positionString;
+                        System.out.print("Enter a position: ");
+                        positionString = input.nextLine();
 
-                        do {
-                            System.out.print("Enter a position: ");
-                            positionString = input.nextLine();
+                        try {
+                            // Coverts the input to an Integer if possible
+                            // NumberFormatException is thrown here if user 
+                            // doesn't enter an integer
+                            int position = Integer.parseInt(positionString);
 
-                            try {
-                                // Coverts the input to an Integer if possible
-                                // NumberFormatException is thrown here if user doesn't enter an integer
-                                int position = Integer.parseInt(positionString);
+                            // IllegalArgumentException is thrown here if 
+                            // position is out of bounds
+                            Course course = planner.getCourse(position);
 
-                                // IllegalArgumentException is thrown here if position is out of bounds
-                                Course course = planner.getCourse(position);
+                            // Printing the course by creating a new Planner 
+                            // object and adding the course to it and usingg the
+                            // printAllCourses method. If course is null, then 
+                            // there is no object in the given position.
 
-                                // Printing the course by creating a new Planner object and adding the course to
-                                // it and usingg the printAllCourses method. If course is null, then there is no
-                                // object in the given position.
+                            if (course == null) {
+                                System.out.println("This position is empty");
+                            } else {
 
-                                if (course == null) {
-                                    System.out.println("This position is empty");
-                                } else {
-                                    Planner oneCourse = new Planner();
-                                    oneCourse.addCourse(course);
-                                    oneCourse.printAllCourses();
-                                }
+                                // Planner heading
 
-                                // set isValidPosition to true to stop the loop
-                                isValidPosition = true;
-                            } catch (NumberFormatException e) {
-                                System.out.println("Please enter a number.");
-                            } catch (IllegalArgumentException e) {
-                                System.out.println(e.getMessage());
-                            } catch (Exception e) {
-                                System.out.println("Unexpected Error: " + e);
+                                System.out.printf("%3s %-25s %-10s %4s %7s %s\n"
+                                        , "No.", "Course Name", "Department",
+                                        "Code", "Section", "Instructor");
+
+                                System.out.println(
+                                        "--------------------------------------"
+                                        + "------------------------------------"
+                                        + "-----");
+
+                                // Printing the course
+
+                        System.out.printf("%3d %-25s %-10s %4d      %02d %s\n",
+                                    position, course.getName(),
+                                        course.getDepartment(), course.getCode()
+                                        , course.getSection(),
+                                        course.getInstructor());
                             }
 
-                        } while (!isValidPosition);
+                        } catch (NumberFormatException e) {
+                            System.out.println("Please enter a number.");
+                        } catch (IllegalArgumentException e) {
+                            System.out.println(e.getMessage());
+                        } catch (Exception e) {
+                            System.out.println("Unexpected Error: " + e);
+                        }
                     } else {
                         System.out.println("Planner is empty!");
                     }
@@ -267,42 +273,37 @@ class PlannerManager {
 
                 case "R":
 
-                    // check if the planner is empty using the size() method. If size() == 0,
-                    // then there is noting to remove and tells user planner is empty and go back to
-                    // menu
+                    // check if the planner is empty using the size() method. If
+                    // size() == 0, then there is noting to remove and tells 
+                    // user planner is empty and go back to menu
 
                     if (planner.size() != 0) {
 
-                        // gets the position using a do while loop and a flag variable. If the position
-                        // is valid and getCourse doesn't throw an Exception, then isValidRemovePosition
-                        // is set to true and the loop will end
+                        // gets the position
 
                         String removePositionString = "";
-                        boolean isValidRemovePosition = false;
+                        System.out.print("Enter a position: ");
+                        removePositionString = input.nextLine();
 
-                        do {
-                            System.out.print("Enter a position: ");
-                            removePositionString = input.nextLine();
+                        try {
+                            // Coverts the input to an Integer if possible
+                            // NumberFormatException is thrown here if user
+                            // doesn't enter an integer
+                            int position = 
+                                        Integer.parseInt(removePositionString);
 
-                            try {
-                                // Coverts the input to an Integer if possible
-                                // NumberFormatException is thrown here if user doesn't enter an integer
-                                int position = Integer.parseInt(removePositionString);
+                            // IllegalArgumentException is thrown here if 
+                            // position is out of bounds
+                            planner.removeCourse(position);
 
-                                // IllegalArgumentException is thrown here if position is out of bounds
-                                planner.removeCourse(position);
+                        } catch (NumberFormatException e) {
+                            System.out.println("Please enter a number.");
+                        } catch (IllegalArgumentException e) {
+                            System.out.println(e.getMessage());
+                        } catch (Exception e) {
+                            System.out.println("Unexpected Error: " + e);
+                        }
 
-                                // set isValidRemovePosition to true to stop the loop
-                                isValidRemovePosition = true;
-                            } catch (NumberFormatException e) {
-                                System.out.println("Please enter a number.");
-                            } catch (IllegalArgumentException e) {
-                                System.out.println(e.getMessage());
-                            } catch (Exception e) {
-                                System.out.println("Unexpected Error: " + e);
-                            }
-
-                        } while (!isValidRemovePosition);
                     } else {
                         System.out.println("Planner is empty!");
                     }
@@ -311,32 +312,34 @@ class PlannerManager {
 
                 case "P":
 
-                    // just used the printAllCourses() method defined in the Planner class
+                    System.out.println("\nPlanner:");
+
+                    // just used the printAllCourses() method defined in the
+                    // Planner class
                     planner.printAllCourses();
 
                     break;
 
                 case "F":
 
-                    // Gets the department of the new course and reprompt until entered department
-                    // is valid. This is checked using the validDepartment() method in the Course
-                    // class.
+                    // Gets the department of the new course and reprompt until
+                    // entered department is valid. This is checked using the
+                    // validDepartment() method in the Course class.
 
                     String department = "";
-                    do {
-                        System.out.print("Enter department: ");
-                        department = input.nextLine();
 
-                        if (!Course.validDepartment(department)) {
-                            System.out.println("This department isn't valid!");
-                        }
+                    System.out.print("Enter department: ");
+                    department = input.nextLine();
 
-                    } while (!Course.validDepartment(department));
+                    if (!Course.validDepartment(department)) {
+                        System.out.println("This department isn't valid!");
+                    } else {
 
-                    // After user input is verified to be valid, then use the filter() method in the
-                    // Planner class
+                        // After user input is verified to be valid, then use
+                        // the filter() method in the Planner class
 
-                    Planner.filter(planner, department);
+                        Planner.filter(planner, department);
+                    }
 
                     break;
 
@@ -344,21 +347,34 @@ class PlannerManager {
 
                     // get newCourse using the user input function
 
-                    Course course = userInputCourse(input);
+                    Course course;
 
-                    // uses the locate() method inthe Planner class using the given course
+                    try {
+                        course = userInputCourse(input);
 
-                    int location = planner.locate(course);
+                        // uses the locate() method inthe Planner class using
+                        // the given course
 
-                    // locate returns -1 if the course isn't found and the index of course if the
-                    // course is found
+                        int location = planner.locate(course);
 
-                    if (location == -1) {
-                        System.out.println(course.getDepartment() + " " + course.getCode() + "." + course.getSection()
-                                + " was not found in the planner");
-                    } else {
-                        System.out.println(course.getDepartment() + " " + course.getCode() + "." + course.getSection()
-                                + " was found in planner at position " + (location + 1));
+                        // locate returns -1 if the course isn't found and the
+                        // index of course if the course is found
+
+                        if (location == -1) {
+                            System.out.printf(
+                                "%s %d.%02d was not found in the planner",
+                                    course.getDepartment(),
+                                    course.getCode(), course.getSection());
+                        } else {
+                            System.out.printf(
+                            "%s %d.%02d was found in the planner at position %d"
+                                    , course.getDepartment(),
+                                    course.getCode(), course.getSection(),
+                                    (location + 1));
+                        }
+
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
                     }
 
                     break;
@@ -367,14 +383,15 @@ class PlannerManager {
 
                     // just uses the size() method in the Planner method
 
-                    System.out.println("\nThere Are " + planner.size() + " Courses In The Planner.\n");
+                    System.out.println("\nThere Are " + planner.size() + 
+                                            " Courses In The Planner.\n");
 
                     break;
 
                 case "B":
 
-                    // Sets the backup variable to a clone of planner. Have to caste because clone()
-                    // returns an Object.
+                    // Sets the backup variable to a clone of planner. Have to
+                    // caste because clone() returns an Object.
 
                     backup = (Planner) planner.clone();
 
@@ -384,7 +401,10 @@ class PlannerManager {
 
                 case "PB":
 
-                    // just uses the printAllCourses() method in the Planner method
+                    System.out.println("\nPlanner (Backup):");
+
+                    // just uses the printAllCourses() method in the Planner
+                    // method
 
                     backup.printAllCourses();
 
@@ -392,8 +412,8 @@ class PlannerManager {
 
                 case "RB":
 
-                    // Sets the planner to a clone of backup. Have to caste because clone()
-                    // returns an Object.
+                    // Sets the planner to a clone of backup. Have to caste 
+                    // because clone() returns an Object.
 
                     planner = (Planner) backup.clone();
 
