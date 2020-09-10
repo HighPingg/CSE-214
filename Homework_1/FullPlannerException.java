@@ -1,3 +1,5 @@
+package Homework_1;
+
 /**
  * FullPlannerException is a custom Exception used in the Planner class mainly
  * for when the courses array is full. Takes in a string as a message to be

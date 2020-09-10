@@ -1,3 +1,5 @@
+package Homework_1;
+
 /**
  * Course class holding all the variables necessary for a valid Course. Contains
  * all getters, setters, valid variable checkers, clone and equals method.
@@ -11,7 +13,7 @@
  * @ta - William Simunek
  */
 
-class Course {
+public class Course {
 
     //All thhe variables required for this to be a valid Course
 

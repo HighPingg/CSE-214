@@ -1,3 +1,5 @@
+package Homework_1;
+
 /**
  * Planner class holds an array of courses and contains methods for functions
  * with the Courses, such as add, remove, filter, size, isFull, get, equals,
