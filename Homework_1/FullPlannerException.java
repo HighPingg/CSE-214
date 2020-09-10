@@ -17,12 +17,17 @@ package Homework_1;
 public class FullPlannerException extends Exception  {
 
     /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Constructor that creates a FullPlannerException using s as the message
      * 
      * @param s the message to add to the Exception
      * 
-     * postCondition: This FullPlannerException is instatiated with a valid
-     *                message.
+     *          postCondition: This FullPlannerException is instatiated with a valid
+     *          message.
      */
     
     public FullPlannerException(String s) {
