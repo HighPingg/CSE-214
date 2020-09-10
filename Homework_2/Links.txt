@@ -1,0 +1,17 @@
+* Instructions: https://blackboard.stonybrook.edu/bbcswebdav/pid-5712338-dt-content-rid-45572832_1/xid-45572832_1v
+
+
+* Rubric: https://blackboard.stonybrook.edu/bbcswebdav/pid-5712338-dt-content-rid-45572878_1/xid-45572878_1
+
+
+/**
+ * 
+ * 
+ * @author Vincent Zheng
+ *      Solar_ID: 113469839
+ *      Email: vincent.zheng@stonybrook.edu
+ *      Assignment: 2
+ *      Course: CSE 214
+ *      Recitation: R02
+ *      TA: William Simunek
+ */
