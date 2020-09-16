@@ -112,4 +112,83 @@ public class ProductLoad {
         this.isDangerous = isDangerous;
     }
 
+    /**
+     * Checks whether or not the given Object is a valid name
+     * 
+     * @param obj The Object that needs to be checked whether or not it is a valid
+     *            name
+     * 
+     * @return true if the Object passes all conditions and no errors are thrown
+     * 
+     * @throws IllegalAccessException If Object is not an instance of String,
+     *                                contains letters other than letters and
+     *                                spaces, is empty, or is greater than 25
+     *                                characters
+     */
+    public static boolean validName(Object obj) throws IllegalAccessException {
+        if (obj instanceof String) {
+            String name = (String) obj;
+
+            if (name.length() == 0)
+                throw new IllegalArgumentException("The given name is empty");
+
+            if (name.length() > 25)
+                throw new IllegalArgumentException("The given name is too long");
+
+            if (!name.matches("[a-zA-Z ]*"))
+                throw new IllegalArgumentException("The given name contains illegal characters");
+
+            return true;
+        }
+
+        throw new IllegalArgumentException("The given name not an instance of String");
+    }
+
+    /**
+     * Checks whether or not the given Object is a valid weight
+     * 
+     * @param obj The Object that needs to be checked whether or not it is a valid
+     *            weight
+     * 
+     * @return true if the Object passes all conditions and no errors are thrown
+     * 
+     * @throws IllegalAccessException If Object is not an instance of double, or is
+     *                                negative
+     */
+    public static boolean validWeight(Object obj) throws IllegalAccessException {
+        if (obj instanceof Double) {
+            double weight = (double) obj;
+
+            if (weight < 0)
+                throw new IllegalArgumentException("The given weight is negative");
+
+            return true;
+        }
+
+        throw new IllegalArgumentException("The given weight not an instance of double");
+    }
+
+    /**
+     * Checks whether or not the given Object is a valid value
+     * 
+     * @param obj The Object that needs to be checked whether or not it is a valid
+     *            value
+     * 
+     * @return true if the Object passes all conditions and no errors are thrown
+     * 
+     * @throws IllegalAccessException If Object is not an instance of double, or is
+     *                                negative
+     */
+    public static boolean validValue(Object obj) throws IllegalAccessException {
+        if (obj instanceof Double) {
+            double value = (double) obj;
+
+            if (value < 0)
+                throw new IllegalArgumentException("The given value is negative");
+
+            return true;
+        }
+
+        throw new IllegalArgumentException("The given value not an instance of double");
+    }
 }
