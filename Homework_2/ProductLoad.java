@@ -19,11 +19,24 @@ public class ProductLoad {
      * valid checkers to determine whether or not the given values are valid.
      * 
      * @param name        the name of the load
+     * 
      * @param weight      the weight of the load
+     * 
      * @param value       the value in dollars of the load
+     * 
      * @param isDangerous whether or not the load is dangerous or not
+     * 
+     * @throws IllegalArgumentException if the given values fail the valid checkers
      */
-    public ProductLoad(String name, double weight, double value, boolean isDangerous) {
+    public ProductLoad(String name, double weight, double value, boolean isDangerous) throws IllegalArgumentException {
+
+        // Checks the values. If invalid it will pass on the throw Exception of the
+        // valid checkers
+
+        validName(name);
+        validWeight(weight);
+        validValue(value);
+        validIsDangerous(isDangerous);
 
         this.name = name;
         this.weight = weight;
@@ -120,12 +133,12 @@ public class ProductLoad {
      * 
      * @return true if the Object passes all conditions and no errors are thrown
      * 
-     * @throws IllegalAccessException If Object is not an instance of String,
-     *                                contains letters other than letters and
-     *                                spaces, is empty, or is greater than 25
-     *                                characters
+     * @throws IllegalArgumentException If Object is not an instance of String,
+     *                                  contains letters other than letters and
+     *                                  spaces, is empty, or is greater than 25
+     *                                  characters
      */
-    public static boolean validName(Object obj) throws IllegalAccessException {
+    public static boolean validName(Object obj) throws IllegalArgumentException {
         if (obj instanceof String) {
             String name = (String) obj;
 
@@ -152,10 +165,10 @@ public class ProductLoad {
      * 
      * @return true if the Object passes all conditions and no errors are thrown
      * 
-     * @throws IllegalAccessException If Object is not an instance of double, or is
-     *                                negative
+     * @throws IllegalArgumentException If Object is not an instance of double, or
+     *                                  is negative
      */
-    public static boolean validWeight(Object obj) throws IllegalAccessException {
+    public static boolean validWeight(Object obj) throws IllegalArgumentException {
         if (obj instanceof Double) {
             double weight = (double) obj;
 
@@ -176,10 +189,10 @@ public class ProductLoad {
      * 
      * @return true if the Object passes all conditions and no errors are thrown
      * 
-     * @throws IllegalAccessException If Object is not an instance of double, or is
-     *                                negative
+     * @throws IllegalArgumentException If Object is not an instance of double, or
+     *                                  is negative
      */
-    public static boolean validValue(Object obj) throws IllegalAccessException {
+    public static boolean validValue(Object obj) throws IllegalArgumentException {
         if (obj instanceof Double) {
             double value = (double) obj;
 
@@ -190,5 +203,23 @@ public class ProductLoad {
         }
 
         throw new IllegalArgumentException("The given value not an instance of double");
+    }
+
+    /**
+     * Checks whether or not the given Object is a valid isDangerous
+     * 
+     * @param obj The Object that needs to be checked whether or not it is a valid
+     *            isDangerous
+     * 
+     * @return true if the Object passes all conditions and no errors are thrown
+     * 
+     * @throws IllegalArgumentException If Object is not an instance of boolean
+     */
+    public static boolean validIsDangerous(Object obj) throws IllegalArgumentException {
+        if (obj instanceof Boolean) {
+            return true;
+        }
+
+        throw new IllegalArgumentException("The given value not an instance of boolean");
     }
 }
