@@ -267,7 +267,7 @@ public class Course {
         if (obj instanceof String) {
             String name = (String) obj;
 
-            return name.matches("[a-zA-z ]*") && name.length() != 0 && 
+            return name.matches("[a-zA-Z ]*") && name.length() != 0 && 
                     name.length() <= 25;
         }
 
@@ -354,7 +354,7 @@ public class Course {
         if (obj instanceof String) {
             String instructor = (String) obj;
 
-            return instructor.matches("[a-zA-z ]*") && instructor.length() != 0 
+            return instructor.matches("[a-zA-Z ]*") && instructor.length() != 0 
                     && instructor.length() <= 25;
         }
 
