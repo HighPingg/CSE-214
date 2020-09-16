@@ -84,44 +84,52 @@ public class ProductLoad {
     /**
      * Sets the name of this ProductLoad object
      * 
-     * @param name
+     * @param name the value to set name to
      * 
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if the given value fail the valid checker
      */
-    public void setName(String name) {
+    public void setName(String name) throws IllegalArgumentException {
+        validName(name);
+
         this.name = name;
     }
 
     /**
      * Sets the name of this Course object
      * 
-     * @param weight
+     * @param weight the value to set weight to
      * 
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if the given value fail the valid checker
      */
-    public void setWeight(double weight) {
+    public void setWeight(double weight) throws IllegalArgumentException {
+        validWeight(weight);
+
         this.weight = weight;
     }
 
     /**
      * Sets the name of this Course object
      * 
-     * @param value
+     * @param value the value to set value to
      * 
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if the given value fail the valid checker
      */
-    public void setValue(double value) {
+    public void setValue(double value) throws IllegalArgumentException {
+        validValue(value);
+
         this.value = value;
     }
 
     /**
      * Sets the name of this Course object
      * 
-     * @param isDangerous
+     * @param isDangerous the value to set isDangerous to
      * 
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if the given value fail the valid checker
      */
-    public void setDangerous(boolean isDangerous) {
+    public void setDangerous(boolean isDangerous) throws IllegalArgumentException {
+        validIsDangerous(isDangerous);
+
         this.isDangerous = isDangerous;
     }
 
