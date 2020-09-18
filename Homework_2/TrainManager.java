@@ -7,6 +7,8 @@ public class TrainManager {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
+        TrainLinkedList list = new TrainLinkedList();
+
         boolean userQuit = false;
 
         do {
@@ -26,19 +28,90 @@ public class TrainManager {
             switch (input.nextLine().toUpperCase()) {
                 case "F":
 
-                    System.out.println("F");
+                    // uses the cursor forward method in TrainLinkedList
+                    try {
+
+                        // IllegalStateException thrown here if cursor is at tail or list is empty
+                        list.cursorForward();
+
+                        System.out.println("\nCursor Successfully Moved Forwards");
+
+                    } catch (IllegalStateException e) {
+
+                        System.out.println(e.getMessage());
+
+                    } catch (Exception e) {
+
+                        System.out.println("Unexpected Error: " + e);
+
+                    }
 
                     break;
 
                 case "B":
 
-                    System.out.println("B");
+                    // uses the cursor backwards method in TrainLinkedList
+                    try {
+                        // IllegalStateException thrown here if cursor is at head or list is empty
+                        list.cursorBackward();
+
+                        System.out.println("\nCursor Successfully Moved Forwards");
+
+                    } catch (IllegalStateException e) {
+
+                        System.out.println(e.getMessage());
+
+                    } catch (Exception e) {
+
+                        System.out.println("Unexpected Error: " + e);
+
+                    }
 
                     break;
 
                 case "I":
 
-                    System.out.println("I");
+                    // uses the .insertAfterCursor() method in TrainLinkedList
+                    try {
+                        // get user inputs
+                        System.out.print("Enter car length in meters: ");
+                        String lengthString = input.nextLine();
+
+                        // NumberFormatException is thrown here if lengthString can not be turned into a
+                        // double
+                        double length = Double.parseDouble(lengthString);
+
+                        // checks if input is valid
+                        TrainCar.validLength(length);
+
+                        System.out.print("Enter car weight in tons: ");
+                        String weightString = input.nextLine();
+
+                        // NumberFormatException is thrown here if weightString can not be turned into a
+                        // double
+                        double weight = Double.parseDouble(weightString);
+
+                        // checks if input is valid
+                        TrainCar.validWeight(weight);
+
+                        // insert into list throws IllegalArgumentException here if car is null
+                        list.insertAfterCursor(new TrainCar(length, weight));
+
+                        System.out.printf("\nNew train car %f meters %f tons inserted into train.", length, weight);
+
+                    } catch (NumberFormatException e) {
+
+                        System.out.println("\nYour input isn't a double value");
+
+                    } catch (IllegalArgumentException e) {
+
+                        System.out.println("\n" + e.getMessage());
+
+                    } catch (Exception e) {
+
+                        System.out.println("Unexpected Error: " + e);
+
+                    }
 
                     break;
 
@@ -62,7 +135,7 @@ public class TrainManager {
 
                 case "T":
 
-                    System.out.println("T");
+                    list.printManifest();
 
                     break;
 
