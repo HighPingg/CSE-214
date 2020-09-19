@@ -230,4 +230,18 @@ public class ProductLoad {
 
         throw new IllegalArgumentException("The given value not an instance of boolean");
     }
+
+    /**
+     * Returns a String form of this <code>ProductLoad</code> with the load name,
+     * load weight, load value, and whether or not the load is dangerous
+     */
+    public void printLoad() {
+        System.out.printf("%25s %10s %10s %9s\n", "Name", "Weight (t)", "Value ($)", "Dangerous");
+        System.out.println("================================================================");
+
+        if (isDangerous())
+            System.out.printf("\n%25s %10.2f %10.2f %9s", getName(), getWeight(), getValue(), "YES");
+        else
+            System.out.printf("\n%25s %10.2f %10.2f %9s", getName(), getWeight(), getValue(), "NO");
+    }
 }

@@ -349,6 +349,7 @@ public class TrainLinkedList {
                         tempPointer = tempPointer.getNext();
                     }
 
+                    // stillHasDanger will be false here if there isn't any danger anymore.
                     if (!stillHasDanger) {
                         hasDanger = false;
                     }
@@ -359,23 +360,80 @@ public class TrainLinkedList {
         return carRemoved;
     }
 
-    public void findProduct(String name) {
-        
+    /**
+     * Searches the list for all ProductLoad objects with the indicated name and
+     * sums together their weight and value (Also keeps track of whether the product
+     * is dangerous or not), then prints a single ProductLoad record to the console.
+     * 
+     * @param name the name of the ProductLoad to find on the train.
+     * 
+     * @throws IllegalArgumentException if name is null
+     */
+    public void findProduct(String name) throws IllegalArgumentException {
+        if (name == null) {
+            throw new IllegalArgumentException("Name is null!");
+        }
+
+        TrainCarNode tempPointer = head;
+
+        // holds the total items, weight, value, and whether or not the cars are
+        // dangerous
+        int itemsMatched = 0;
+        double weightMatched = 0;
+        double valueMathched = 0;
+        boolean danger = false;
+
+        // goes through the whole list and checks if the names equal the target name. if
+        // it does, then adds the weight and value to the total as well as increments
+        // itemsMatched and updates danger if the item is dangerous
+        while (tempPointer != null) {
+            ProductLoad load = tempPointer.getCar().getLoad();
+
+            if (load != null && load.getName().equals(name)) {
+                itemsMatched++;
+                weightMatched += load.getWeight();
+                valueMathched += load.getValue();
+                danger = (danger || load.isDangerous());
+            }
+
+            tempPointer = tempPointer.getNext();
+        }
+
+        // prints out the number or cars matched and the load info
+        if (itemsMatched != 0) {
+            System.out.println("The following products were found on + " + itemsMatched + " cars:");
+            new ProductLoad(name, weightMatched, valueMathched, danger).printLoad();
+        } else {
+            System.out.println("There are no matches!");
+        }
     }
 
     /**
      * Removes all dangerous cars from the train using <code>.removeCursor()</code>,
      * maintaining the order of the cars in the train.
+     * 
+     * @throws IllegalStateException if the list is empty
      */
-    public void removeDangerousCars() {
+    public void removeDangerousCars() throws IllegalStateException {
+        if (cursor == null) {
+            throw new IllegalStateException("There are no elements in the list!");
+        }
 
+        // starts at head and goes through whole list and checks of the car contains a
+        // dangerous node
         cursor = head;
 
         while (cursor != null) {
+
+            // if the car doesn't have a load, then it will advance the cursor
             if (cursor.getCar().getLoad() == null) {
                 cursor = cursor.getNext();
+
+                // if the cursor's load is dangerous, remove the car
             } else if (cursor.getCar().getLoad().isDangerous()) {
                 removeCursor();
+            } else {
+                cursor = cursor.getNext();
             }
         }
 
@@ -389,12 +447,12 @@ public class TrainLinkedList {
      */
     public void printManifest() {
 
-        String headerString = ("\n    CAR:                               LOAD:");
+        String headerString = ("\n    CAR:                                LOAD:");
 
-        String tableHeaderString = String.format("\n      %s   %s    %s  |    %25s      %s     %s   %s\n", "Num",
+        String tableHeaderString = String.format("\n      %s    %10s    %10s  | %25s    %10s    %10s   %s\n", "Num",
                 "Length (m)", "Weight (t)", "Name", "Weight (t)", "Value ($)", "Dangerous");
 
-        String bigLine = "    ==================================+===============================================================\n";
+        String bigLine = "    ===================================+===================================================================\n";
 
         String tableInsides = "";
 
@@ -438,7 +496,7 @@ public class TrainLinkedList {
             isDangerouString = "not dangerous";
         }
 
-        return String.format("Train: %d cars, %f meters, %f tons, $%f value, %s", totalCars, totalLength, totalWeight,
+        return String.format("Train: %d cars, %.2f meters, %.2f tons, $%.2f value, %s", totalCars, totalLength, totalWeight,
                 totalValue, isDangerouString);
     }
 }

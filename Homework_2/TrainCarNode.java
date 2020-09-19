@@ -103,35 +103,25 @@ public class TrainCarNode {
     @Override
     public String toString() {
 
-        String loadNameString;
-        String loadWeightString;
-        String loadValueString;
         String isDangerousString;
 
         // if there is no load
         if (car.getLoad() == null) {
+            return String.format(" %10.2f    %10.2f  | %25s    %10.2f    %10.2f    %9s", car.getCarLength(),
+                    car.getCarWeight(), "EMPTY", 0.0, 0.0, "NO");
 
-            loadNameString = "EMPTY";
-            loadWeightString = "0.0";
-            loadValueString = "0.00";
-            isDangerousString = "NO";
-
-            // else if there is a load
-        } else {
-
-            loadNameString = car.getLoad().getName();
-            loadWeightString = String.valueOf(car.getLoad().getWeight());
-            loadValueString = String.valueOf(car.getLoad().getValue());
-
-            // turns the boolean isDangerous to a String. YES if true, No if false
-            if (car.getLoad().isDangerous()) {
-                isDangerousString = "YES";
-            } else {
-                isDangerousString = "NO";
-            }
         }
 
-        return String.format("%10s    %10s  | %25s    %10s    %10s   %s", car.getCarLength(), car.getCarWeight(),
-                loadNameString, loadWeightString, loadValueString, isDangerousString);
+        // else if there is a load
+        // turns the boolean isDangerous to a String. YES if true, No if false
+        if (car.getLoad().isDangerous()) {
+            isDangerousString = "YES";
+        } else {
+            isDangerousString = "NO";
+        }
+
+        return String.format(" %10.2f    %10.2f  | %25s    %10.2f    %10.2f    %9s", car.getCarLength(),
+                car.getCarWeight(), car.getLoad().getName(), car.getLoad().getWeight(), car.getLoad().getValue(),
+                isDangerousString);
     }
 }

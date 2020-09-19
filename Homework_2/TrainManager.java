@@ -58,7 +58,7 @@ public class TrainManager {
                         // IllegalStateException thrown here if cursor is at head or list is empty
                         list.cursorBackward();
 
-                        System.out.println("\nCursor Successfully Moved Forwards");
+                        System.out.println("\nCursor Successfully Moved Backwards");
 
                     } catch (IllegalStateException e) {
 
@@ -100,7 +100,7 @@ public class TrainManager {
                         // insert into list throws IllegalArgumentException here if car is null
                         list.insertAfterCursor(new TrainCar(length, weight));
 
-                        System.out.printf("\nNew train car %f meters %f tons inserted into train.", length, weight);
+                        System.out.printf("\nNew train car %.2f meters %.2f tons inserted into train.", length, weight);
 
                     } catch (NumberFormatException e) {
 
@@ -126,24 +126,23 @@ public class TrainManager {
                         // IllegalStateException is thrown here if the list is empty
                         TrainCar car = list.removeCursor();
 
-                        if (list.removeCursor().getLoad() != null) {
+                        if (car.getLoad() != null) {
                             ProductLoad load = car.getLoad();
 
                             System.out.println(
                                     "Car successfully unlinked. The following load has been unlinked from the train:\n\n");
 
-                            System.out.printf("%25s %10s %10s %9s", "Name", "Weight (t)", "Value ($)", "Dangerous");
-
-                            if (load.isDangerous())
-                                System.out.printf("", load.getName(), load.getWeight(), load.getValue(), "YES");
-                            else
-                                System.out.printf("", load.getName(), load.getWeight(), load.getValue(), "NO");
+                            load.printLoad();
+                        } else {
+                            System.out.println("Empty car removed from the list.");
                         }
 
                     } catch (IllegalStateException e) {
                         System.out.println(e.getMessage());
                     } catch (Exception e) {
                         System.out.println("Unexpected Error: " + e);
+
+                        e.printStackTrace();
                     }
 
                     break;
@@ -153,22 +152,34 @@ public class TrainManager {
                     try {
 
                         // gets user inputs
-                        System.out.println("Enter product name: ");
+                        System.out.print("\nEnter product name: ");
                         String name = input.nextLine();
 
-                        System.out.println("Enter product weight: ");
+                        // checks if entered name is a valid name IllegalArgumentException is thrown
+                        // here
+                        ProductLoad.validName(name);
+
+                        System.out.print("\nEnter product weight: ");
 
                         // NumberFormatException is thrown here if the input can not be turned into a
                         // double
                         double weight = Double.parseDouble(input.nextLine());
 
-                        System.out.println("Enter product value: ");
+                        // checks if entered weight is a valid weight IllegalArgumentException is thrown
+                        // here
+                        ProductLoad.validWeight(weight);
+
+                        System.out.print("\nEnter product value: ");
 
                         // NumberFormatException is thrown here if the input can not be turned into a
                         // double
                         double value = Double.parseDouble(input.nextLine());
 
-                        System.out.println("Enter is product dangerous? (y/n): ");
+                        // checks if entered value is a valid value IllegalArgumentException is thrown
+                        // here
+                        ProductLoad.validValue(value);
+
+                        System.out.print("\nEnter is product dangerous? (y/n): ");
                         String isDangerousString = input.nextLine();
 
                         switch (isDangerousString.toLowerCase()) {
@@ -210,7 +221,24 @@ public class TrainManager {
 
                 case "S":
 
-                    System.out.println("S");
+                    try {
+                        // gets the name
+                        System.out.print("Enter product name: ");
+                        String name = input.nextLine();
+
+                        // checks if entered name is a valid name IllegalArgumentException is thrown
+                        // here
+                        ProductLoad.validName(name);
+
+                        // use the .findProduct() method in TrainLinkedList IllegalArgumentException is
+                        // thrown here
+                        list.findProduct(name);
+
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage());
+                    } catch (Exception e) {
+                        System.out.println("Unexpected Error: " + e.getMessage());
+                    }
 
                     break;
 
@@ -232,9 +260,13 @@ public class TrainManager {
                 case "D":
 
                     try {
+                        // uses the .removeDangerousCars() method in TrainLinkedList.
+                        // IllegalStateException is thrown here
                         list.removeDangerousCars();
 
                         System.out.println("Dangerous items successfully removed.");
+                    } catch (IllegalStateException e) {
+                        System.out.println(e.getMessage());
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
