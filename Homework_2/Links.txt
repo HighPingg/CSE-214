@@ -1,7 +1,7 @@
-* Instructions: https://blackboard.stonybrook.edu/bbcswebdav/pid-5712338-dt-content-rid-45572832_1/xid-45572832_1v
+* Instructions: https://blackboard.stonybrook.edu/bbcswebdav/pid-5712338-dt-content-rid-45807815_1/courses/1208-CSE-214-SEC01-89077/hw2%282%29.html
 
 
-* Rubric: https://blackboard.stonybrook.edu/bbcswebdav/pid-5712338-dt-content-rid-45572878_1/xid-45572878_1
+* Rubric: https://blackboard.stonybrook.edu/bbcswebdav/pid-5712338-dt-content-rid-45807816_1/courses/1208-CSE-214-SEC01-89077/hw2key%283%29.html
 
 
 /**

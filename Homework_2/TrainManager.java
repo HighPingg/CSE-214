@@ -9,6 +9,7 @@ public class TrainManager {
 
         TrainLinkedList list = new TrainLinkedList();
 
+        // exit condition (Turns true if user enters "Q" into the menu)
         boolean userQuit = false;
 
         do {
@@ -23,8 +24,10 @@ public class TrainManager {
             System.out.println("(D) Remove Dangerous Cars");
             System.out.println("(Q) Quit\n");
 
-            System.out.println("\nEnter a Selection: ");
+            System.out.print("\nEnter a Selection: ");
 
+            // puts the user's choice in a switch case. Used .toUpperCase() to make user
+            // input case insensitive
             switch (input.nextLine().toUpperCase()) {
                 case "F":
 
@@ -117,13 +120,91 @@ public class TrainManager {
 
                 case "R":
 
-                    System.out.println("R");
+                    // uses the .removeCursor() method in TrainLinkedList
+                    try {
+
+                        // IllegalStateException is thrown here if the list is empty
+                        TrainCar car = list.removeCursor();
+
+                        if (list.removeCursor().getLoad() != null) {
+                            ProductLoad load = car.getLoad();
+
+                            System.out.println(
+                                    "Car successfully unlinked. The following load has been unlinked from the train:\n\n");
+
+                            System.out.printf("%25s %10s %10s %9s", "Name", "Weight (t)", "Value ($)", "Dangerous");
+
+                            if (load.isDangerous())
+                                System.out.printf("", load.getName(), load.getWeight(), load.getValue(), "YES");
+                            else
+                                System.out.printf("", load.getName(), load.getWeight(), load.getValue(), "NO");
+                        }
+
+                    } catch (IllegalStateException e) {
+                        System.out.println(e.getMessage());
+                    } catch (Exception e) {
+                        System.out.println("Unexpected Error: " + e);
+                    }
 
                     break;
 
                 case "L":
 
-                    System.out.println("L");
+                    try {
+
+                        // gets user inputs
+                        System.out.println("Enter product name: ");
+                        String name = input.nextLine();
+
+                        System.out.println("Enter product weight: ");
+
+                        // NumberFormatException is thrown here if the input can not be turned into a
+                        // double
+                        double weight = Double.parseDouble(input.nextLine());
+
+                        System.out.println("Enter product value: ");
+
+                        // NumberFormatException is thrown here if the input can not be turned into a
+                        // double
+                        double value = Double.parseDouble(input.nextLine());
+
+                        System.out.println("Enter is product dangerous? (y/n): ");
+                        String isDangerousString = input.nextLine();
+
+                        switch (isDangerousString.toLowerCase()) {
+                            case "y":
+
+                                // if user indicated that load is dangerous, enter true into the constructor
+                                // IllegalArgumentException is thrown if any of the values are invalid
+                                list.addLoadAtCursor(new ProductLoad(name, weight, value, true));
+
+                                break;
+
+                            case "n":
+
+                                // if user indicated that load is not dangerous, enter false into the
+                                // constructor
+                                // IllegalArgumentException is thrown if any of the values are invalid
+                                list.addLoadAtCursor(new ProductLoad(name, weight, value, false));
+
+                                break;
+
+                            default:
+
+                                System.out.println("Please enter either y  or n!");
+
+                                break;
+                        }
+
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter a double!");
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage());
+                    } catch (IllegalStateException e) {
+                        System.out.println(e.getMessage());
+                    } catch (Exception e) {
+                        System.out.println("Unexpected Error: " + e);
+                    }
 
                     break;
 
@@ -134,20 +215,29 @@ public class TrainManager {
                     break;
 
                 case "T":
-
-                    list.printManifest();
+                    // prints the train using the <code>TrainLinkedList.toString()</code>
+                    // function
+                    System.out.println(list.toString());
 
                     break;
 
                 case "M":
 
-                    System.out.println("M");
+                    // prints the manifest using the <code>TrainLinkedList.printManifest()</code>
+                    // function
+                    list.printManifest();
 
                     break;
 
                 case "D":
 
-                    System.out.println("D");
+                    try {
+                        list.removeDangerousCars();
+
+                        System.out.println("Dangerous items successfully removed.");
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
 
                     break;
 
@@ -158,6 +248,8 @@ public class TrainManager {
 
                     break;
 
+                // if the input doesn't match any of the cases, then it tells the user that it's
+                // invalid
                 default:
 
                     System.out.println("Your input didn't match any of the choices!");
