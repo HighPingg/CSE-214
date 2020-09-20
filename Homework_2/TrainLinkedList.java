@@ -401,7 +401,7 @@ public class TrainLinkedList {
 
         // prints out the number or cars matched and the load info
         if (itemsMatched != 0) {
-            System.out.println("The following products were found on + " + itemsMatched + " cars:");
+            System.out.println("The following products were found on " + itemsMatched + " cars:");
             new ProductLoad(name, weightMatched, valueMathched, danger).printLoad();
         } else {
             System.out.println("There are no matches!");
@@ -449,7 +449,7 @@ public class TrainLinkedList {
 
         String headerString = ("\n    CAR:                                LOAD:");
 
-        String tableHeaderString = String.format("\n      %s    %10s    %10s  | %25s    %10s    %10s   %s\n", "Num",
+        String tableHeaderString = String.format("\n      %s    %10s    %10s  | %25s    %10s    %10s    %s\n", "Num",
                 "Length (m)", "Weight (t)", "Name", "Weight (t)", "Value ($)", "Dangerous");
 
         String bigLine = "    ===================================+===================================================================\n";

@@ -236,12 +236,12 @@ public class ProductLoad {
      * load weight, load value, and whether or not the load is dangerous
      */
     public void printLoad() {
-        System.out.printf("%25s %10s %10s %9s\n", "Name", "Weight (t)", "Value ($)", "Dangerous");
-        System.out.println("================================================================");
+        System.out.printf("\n\n%25s    %10s    %10s    %9s\n", "Name", "Weight (t)", "Value ($)", "Dangerous");
+        System.out.print("    ==============================================================");
 
         if (isDangerous())
-            System.out.printf("\n%25s %10.2f %10.2f %9s", getName(), getWeight(), getValue(), "YES");
+            System.out.printf("\n%25s    %10.2f    %10.2f    %9s", getName(), getWeight(), getValue(), "YES");
         else
-            System.out.printf("\n%25s %10.2f %10.2f %9s", getName(), getWeight(), getValue(), "NO");
+            System.out.printf("\n%25s    %10.2f    %10.2f    %9s", getName(), getWeight(), getValue(), "NO");
     }
 }
