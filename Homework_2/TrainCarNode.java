@@ -1,5 +1,17 @@
 package Homework_2;
 
+/**
+ * Acts as a wrapper for the TrainCar method. Contains the previous, next and
+ * current references.
+ * 
+ * @author Vincent Zheng
+ *      Solar_ID: 113469839
+ *      Email: vincent.zheng@stonybrook.edu
+ *      Assignment: 2
+ *      Course: CSE 214
+ *      Recitation: R02
+ *      TA: William Simunek
+ */
 public class TrainCarNode {
 
     // TrainCarNode holding the previous link to this Node
@@ -12,7 +24,8 @@ public class TrainCarNode {
     private TrainCar car;
 
     /**
-     * Default constructor initializes this TrainCarNode and sets everything to null
+     * Default constructor initializes this TrainCarNode and sets everything to
+     * null
      */
     public TrainCarNode() {
         this.prev = null;
@@ -21,10 +34,10 @@ public class TrainCarNode {
     }
 
     /**
-     * Overloader constructor initializes this TrainCarNode with prev and next to
-     * null, but with a TrainCar object. There is no need to valid check car because
-     * in order for a new TrainCar to be initialized, it has to already have gone
-     * through a valid checker.
+     * Overloader constructor initializes this TrainCarNode with prev and next
+     * to null, but with a TrainCar object. There is no need to valid check car
+     * because in order for a new TrainCar to be initialized, it has to already
+     * have gone through a valid checker.
      * 
      * @param car the TrainCar to set this car to
      */
@@ -95,8 +108,9 @@ public class TrainCarNode {
     }
 
     /**
-     * Returns a String form of this TrainCarNode with the car length, car weight,
-     * load name, load weight, load value, and whether or not the load is dangerous
+     * Returns a String form of this TrainCarNode with the car length, car
+     * weight, load name, load weight, load value, and whether or not the load
+     * is dangerous
      * 
      * @return a formatted String representation of this TrainCarNode
      */
@@ -107,8 +121,10 @@ public class TrainCarNode {
 
         // if there is no load
         if (car.getLoad() == null) {
-            return String.format(" %10.2f    %10.2f  | %25s    %10.2f    %10.2f    %9s", car.getCarLength(),
-                    car.getCarWeight(), "EMPTY", 0.0, 0.0, "NO");
+            return String.format(
+                " %,10.2f    %,10.2f  | %25s    %,10.2f    %,10.2f    %9s",
+                car.getCarLength(), car.getCarWeight(), "EMPTY", 0.0, 0.0,
+                "NO");
 
         }
 
@@ -120,8 +136,10 @@ public class TrainCarNode {
             isDangerousString = "NO";
         }
 
-        return String.format(" %10.2f    %10.2f  | %25s    %10.2f    %10.2f    %9s", car.getCarLength(),
-                car.getCarWeight(), car.getLoad().getName(), car.getLoad().getWeight(), car.getLoad().getValue(),
+        return String.format(
+                " %,10.2f    %,10.2f  | %25s    %,10.2f    %,10.2f    %9s",
+                car.getCarLength(), car.getCarWeight(), car.getLoad().getName(),
+                car.getLoad().getWeight(), car.getLoad().getValue(),
                 isDangerousString);
     }
 }

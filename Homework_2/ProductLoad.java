@@ -1,5 +1,17 @@
 package Homework_2;
 
+/**
+ * The load inside of the the TrainCar. Contains the name, weight, value and
+ * whether or not the payload is dangerous or not.
+ * 
+ * @author Vincent Zheng
+ *      Solar_ID: 113469839
+ *      Email: vincent.zheng@stonybrook.edu
+ *      Assignment: 2
+ *      Course: CSE 214
+ *      Recitation: R02
+ *      TA: William Simunek
+ */
 public class ProductLoad {
 
     // String holding the name of the load
@@ -15,8 +27,9 @@ public class ProductLoad {
     private boolean isDangerous;
 
     /**
-     * Create and initializes a new ProductLoad using the given values and uses the
-     * valid checkers to determine whether or not the given values are valid.
+     * Create and initializes a new ProductLoad using the given values and uses
+     * the valid checkers to determine whether or not the given values are
+     * valid.
      * 
      * @param name        the name of the load
      * 
@@ -26,12 +39,15 @@ public class ProductLoad {
      * 
      * @param isDangerous whether or not the load is dangerous or not
      * 
-     * @throws IllegalArgumentException if the given values fail the valid checkers
+     * @throws IllegalArgumentException if the given values fail the valid
+     *                                  checkers
      */
-    public ProductLoad(String name, double weight, double value, boolean isDangerous) throws IllegalArgumentException {
+    public ProductLoad(String name, double weight, double value,
+                        boolean isDangerous) throws IllegalArgumentException
+    {
 
-        // Checks the values. If invalid it will pass on the throw Exception of the
-        // valid checkers
+        // Checks the values. If invalid it will pass on the throw Exception of 
+        // the valid checkers
 
         validName(name);
         validWeight(weight);
@@ -86,7 +102,8 @@ public class ProductLoad {
      * 
      * @param name the value to set name to
      * 
-     * @throws IllegalArgumentException if the given value fail the valid checker
+     * @throws IllegalArgumentException if the given value fail the valid
+     *                                  checker
      */
     public void setName(String name) throws IllegalArgumentException {
         validName(name);
@@ -99,7 +116,8 @@ public class ProductLoad {
      * 
      * @param weight the value to set weight to
      * 
-     * @throws IllegalArgumentException if the given value fail the valid checker
+     * @throws IllegalArgumentException if the given value fail the valid
+     *                                  checker
      */
     public void setWeight(double weight) throws IllegalArgumentException {
         validWeight(weight);
@@ -112,7 +130,8 @@ public class ProductLoad {
      * 
      * @param value the value to set value to
      * 
-     * @throws IllegalArgumentException if the given value fail the valid checker
+     * @throws IllegalArgumentException if the given value fail the valid
+     *                                  checker
      */
     public void setValue(double value) throws IllegalArgumentException {
         validValue(value);
@@ -125,9 +144,12 @@ public class ProductLoad {
      * 
      * @param isDangerous the value to set isDangerous to
      * 
-     * @throws IllegalArgumentException if the given value fail the valid checker
+     * @throws IllegalArgumentException if the given value fail the valid
+     *                                  checker
      */
-    public void setDangerous(boolean isDangerous) throws IllegalArgumentException {
+    public void setDangerous(boolean isDangerous)
+                                throws IllegalArgumentException
+    {
         validIsDangerous(isDangerous);
 
         this.isDangerous = isDangerous;
@@ -136,8 +158,8 @@ public class ProductLoad {
     /**
      * Checks whether or not the given Object is a valid name
      * 
-     * @param obj The Object that needs to be checked whether or not it is a valid
-     *            name
+     * @param obj The Object that needs to be checked whether or not it is a
+     *            valid name
      * 
      * @return true if the Object passes all conditions and no errors are thrown
      * 
@@ -146,7 +168,8 @@ public class ProductLoad {
      *                                  spaces, is empty, or is greater than 25
      *                                  characters
      */
-    public static boolean validName(Object obj) throws IllegalArgumentException {
+    public static boolean validName(Object obj) throws IllegalArgumentException
+    {
         if (obj instanceof String) {
             String name = (String) obj;
 
@@ -154,94 +177,111 @@ public class ProductLoad {
                 throw new IllegalArgumentException("The given name is empty");
 
             if (name.length() > 25)
-                throw new IllegalArgumentException("The given name is too long");
+                throw new IllegalArgumentException(
+                                        "The given name is too long");
 
             if (!name.matches("[a-zA-Z ]*"))
-                throw new IllegalArgumentException("The given name contains illegal characters");
+                throw new IllegalArgumentException(
+                                "The given name contains illegal characters");
 
             return true;
         }
 
-        throw new IllegalArgumentException("The given name not an instance of String");
+        throw new IllegalArgumentException(
+                                    "The given name not an instance of String");
     }
 
     /**
      * Checks whether or not the given Object is a valid weight
      * 
-     * @param obj The Object that needs to be checked whether or not it is a valid
-     *            weight
+     * @param obj The Object that needs to be checked whether or not it is a
+     *            valid weight
      * 
      * @return true if the Object passes all conditions and no errors are thrown
      * 
-     * @throws IllegalArgumentException If Object is not an instance of double, or
-     *                                  is negative
+     * @throws IllegalArgumentException If Object is not an instance of double,
+     *                                  or is negative
      */
-    public static boolean validWeight(Object obj) throws IllegalArgumentException {
+    public static boolean validWeight(Object obj)
+                                throws IllegalArgumentException
+    {
         if (obj instanceof Double) {
             double weight = (double) obj;
 
             if (weight < 0)
-                throw new IllegalArgumentException("The given weight is negative");
+                throw new IllegalArgumentException(
+                                    "The given weight is negative");
 
             return true;
         }
 
-        throw new IllegalArgumentException("The given weight not an instance of double");
+        throw new IllegalArgumentException(
+                        "The given weight not an instance of double");
     }
 
     /**
      * Checks whether or not the given Object is a valid value
      * 
-     * @param obj The Object that needs to be checked whether or not it is a valid
-     *            value
+     * @param obj The Object that needs to be checked whether or not it is a
+     *            valid value
      * 
      * @return true if the Object passes all conditions and no errors are thrown
      * 
-     * @throws IllegalArgumentException If Object is not an instance of double, or
-     *                                  is negative
+     * @throws IllegalArgumentException If Object is not an instance of double,
+     *                                  or is negative
      */
-    public static boolean validValue(Object obj) throws IllegalArgumentException {
+    public static boolean validValue(Object obj) throws IllegalArgumentException
+    {
         if (obj instanceof Double) {
             double value = (double) obj;
 
             if (value < 0)
-                throw new IllegalArgumentException("The given value is negative");
+                throw new IllegalArgumentException(
+                                "The given value is negative");
 
             return true;
         }
 
-        throw new IllegalArgumentException("The given value not an instance of double");
+        throw new IllegalArgumentException(
+                        "The given value not an instance of double");
     }
 
     /**
      * Checks whether or not the given Object is a valid isDangerous
      * 
-     * @param obj The Object that needs to be checked whether or not it is a valid
-     *            isDangerous
+     * @param obj The Object that needs to be checked whether or not it is a
+     *            valid isDangerous
      * 
      * @return true if the Object passes all conditions and no errors are thrown
      * 
      * @throws IllegalArgumentException If Object is not an instance of boolean
      */
-    public static boolean validIsDangerous(Object obj) throws IllegalArgumentException {
+    public static boolean validIsDangerous(Object obj)
+                            throws IllegalArgumentException
+    {
         if (obj instanceof Boolean) {
             return true;
         }
 
-        throw new IllegalArgumentException("The given value not an instance of boolean");
+        throw new IllegalArgumentException(
+                            "The given value not an instance of boolean");
     }
 
     /**
-     * Returns a String form of this <code>ProductLoad</code> with the load name,
-     * load weight, load value, and whether or not the load is dangerous
+     * Returns a String form of this <code>ProductLoad</code> with the load
+     * name, load weight, load value, and whether or not the load is dangerous
      */
     public void printLoad() {
-        System.out.printf("\n\n%25s    %10s    %10s    %9s\n", "Name", "Weight (t)", "Value ($)", "Dangerous");
-        System.out.print("    ==============================================================");
+        System.out.printf("\n\n%25s    %10s    %10s    %9s\n", "Name",
+                                    "Weight (t)", "Value ($)", "Dangerous");
+        System.out.print(
+          "    ==============================================================");
 
         if (isDangerous())
-            System.out.printf("\n%25s    %10.2f    %10.2f    %9s", getName(), getWeight(), getValue(), "YES");
+            System.out.printf("\n%25s    %,10.2f    %,10.2f    %9s",
+                                getName(), getWeight(), getValue(), "YES");
         else
-            System.out.printf("\n%25s    %10.2f    %10.2f    %9s", getName(), getWeight(), getValue(), "NO");
+            System.out.printf("\n%25s    %,10.2f    %,10.2f    %9s", getName(),
+                                        getWeight(), getValue(), "NO");
     }
 }

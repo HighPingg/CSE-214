@@ -1,5 +1,17 @@
 package Homework_2;
 
+/**
+ * Contains the reference to the head and tail and cursor. It contains all
+ * methods necessary to run operations on the lists
+ * 
+ * @author Vincent Zheng
+ *      Solar_ID: 113469839
+ *      Email: vincent.zheng@stonybrook.edu
+ *      Assignment: 2
+ *      Course: CSE 214
+ *      Recitation: R02
+ *      TA: William Simunek
+ */
 public class TrainLinkedList {
 
     // The first node inside the list
@@ -47,9 +59,9 @@ public class TrainLinkedList {
     }
 
     /**
-     * Returns the total weight in tons of the train. Note that the weight of the
-     * train is the sum of the weights of each empty TrainCar, plus the weight of
-     * the ProductLoad carried by that car.
+     * Returns the total weight in tons of the train. Note that the weight of
+     * the train is the sum of the weights of each empty TrainCar, plus the
+     * weight of the ProductLoad carried by that car.
      * 
      * @return The sum of the weight of each TrainCar plus the sum of the
      *         ProductLoad carried by that car.
@@ -77,11 +89,11 @@ public class TrainLinkedList {
     }
 
     /**
-     * Whether or not there is a dangerous product on one of the TrainCar objects on
-     * the train.
+     * Whether or not there is a dangerous product on one of the TrainCar
+     * objects on the train.
      * 
-     * @return Returns true if the train contains at least one TrainCar carrying a
-     *         dangerous ProductLoad, false otherwise.
+     * @return Returns true if the train contains at least one TrainCar carrying
+     *         a dangerous ProductLoad, false otherwise.
      */
     public boolean isDangerous() {
         return hasDanger;
@@ -106,14 +118,16 @@ public class TrainLinkedList {
     /**
      * Places car in the node currently referenced by the cursor.
      * 
-     * @param car the TrainCar object that is to be set as the car reference in the
-     *            node referenced by cursor
+     * @param car the TrainCar object that is to be set as the car reference in
+     *            the node referenced by cursor
      * 
      * @throws IllegalStateException    if the <code>cursor</code> is empty
      * 
      * @throws IllegalArgumentException if the entered car is null
      */
-    public void setCursorData(TrainCar car) throws IllegalStateException, IllegalArgumentException {
+    public void setCursorData(TrainCar car) throws IllegalStateException,
+                                            IllegalArgumentException
+    {
         if (cursor == null) {
             throw new IllegalStateException("The cursor is empty!");
         } else if (car == null) {
@@ -126,13 +140,14 @@ public class TrainLinkedList {
     /**
      * Moves the cursor to the next TrainCarNode
      * 
-     * @throws IllegalStateException if the cursor is equal to <code>tail</code>, or
-     *                               if the list is empty
+     * @throws IllegalStateException if the cursor is equal to
+     *                               <code>tail</code>, or if the list is empty
      *                               (<code>cursor == null</code>)
      */
     public void cursorForward() throws IllegalStateException {
         if (cursor == tail) {
-            throw new IllegalStateException("The cursor is at the tail of the list.");
+            throw new IllegalStateException(
+                            "The cursor is at the tail of the list.");
         } else if (cursor == null) {
             throw new IllegalStateException("The list is empty");
         }
@@ -144,13 +159,14 @@ public class TrainLinkedList {
     /**
      * Moves the cursor to the previous TrainCarNode
      * 
-     * @throws IllegalStateException if the cursor is equal to <code>head</code> or
-     *                               if the list is empty
+     * @throws IllegalStateException if the cursor is equal to <code>head</code>
+     *                               or if the list is empty
      *                               (<code>cursor == null</code>)
      */
     public void cursorBackward() throws IllegalStateException {
         if (cursor == head) {
-            throw new IllegalStateException("The cursor is at the head of the list.");
+            throw new IllegalStateException(
+                            "The cursor is at the head of the list.");
         } else if (cursor == null) {
             throw new IllegalStateException("The list is empty");
         }
@@ -167,7 +183,8 @@ public class TrainLinkedList {
      * @throws IllegalArgumentException Indicates that <code>car</code> is
      *                                  <code>null</code>.
      */
-    public void insertAfterCursor(TrainCar car) throws IllegalArgumentException {
+    public void insertAfterCursor(TrainCar car) throws IllegalArgumentException
+    {
         if (car == null) {
             throw new IllegalArgumentException("The car you entered is null!");
         }
@@ -224,11 +241,11 @@ public class TrainLinkedList {
     }
 
     /**
-     * Adds a new load object to the train at the <code>cursor</code> and updates
-     * the counters accordingly
+     * Adds a new load object to the train at the <code>cursor</code> and
+     * updates the counters accordingly
      * 
-     * @param load the <code>ProductLoad</code> to add to the <code>TrainCar</code>
-     *             at <code>cursor</code>
+     * @param load the <code>ProductLoad</code> to add to the
+     *             <code>TrainCar</code> at <code>cursor</code>
      * 
      * @throws IllegalArgumentException thrown if the given <code>load</code> is
      *                                  empty
@@ -236,7 +253,9 @@ public class TrainLinkedList {
      * @throws IllegalStateException    thrown if the list is empty or there is
      *                                  already an existing load at the car
      */
-    public void addLoadAtCursor(ProductLoad load) throws IllegalArgumentException, IllegalStateException {
+    public void addLoadAtCursor(ProductLoad load) throws
+                            IllegalArgumentException, IllegalStateException
+    {
         if (load == null) {
             throw new IllegalArgumentException("The load you entered is null!");
         } else if (cursor == null) {
@@ -252,14 +271,18 @@ public class TrainLinkedList {
         totalWeight += load.getWeight();
         totalValue += load.getValue();
 
-        // sets hasDanger to true if it already has dangerous items or if load contains
-        // dangerous items
+        // sets hasDanger to true if it already has dangerous items or if load
+        // contains dangerous items
         hasDanger = (hasDanger || load.isDangerous());
+
+        
+        System.out.printf("\n%,.2f tons of %s added to the current car.",
+                            load.getWeight(), load.getName());
     }
 
     /**
-     * Removes the <code>TrainCarNode</code> referenced by the cursor and returns
-     * the <code>TrainCar</code> contained within the node.
+     * Removes the <code>TrainCarNode</code> referenced by the cursor and
+     * returns the <code>TrainCar</code> contained within the node.
      * 
      * @return the TrainCar reference that was just removed
      * 
@@ -335,21 +358,24 @@ public class TrainLinkedList {
                 totalWeight -= carRemoved.getLoad().getWeight();
                 totalValue -= carRemoved.getLoad().getValue();
 
-                // goes through the updated list to check if there are still dangerous cars in
-                // it. if there isn't then update hasDanger
+                // goes through the updated list to check if there are still
+                // dangerous cars in it. if there isn't then update hasDanger
                 if (hasDanger) {
                     boolean stillHasDanger = false;
                     TrainCarNode tempPointer = head;
 
                     while (!stillHasDanger && tempPointer != null) {
-                        if (tempPointer.getCar().getLoad() != null && tempPointer.getCar().getLoad().isDangerous()) {
+                        if (tempPointer.getCar().getLoad() != null &&
+                                tempPointer.getCar().getLoad().isDangerous())
+                        {
                             stillHasDanger = true;
                         }
 
                         tempPointer = tempPointer.getNext();
                     }
 
-                    // stillHasDanger will be false here if there isn't any danger anymore.
+                    // stillHasDanger will be false here if there isn't any
+                    // danger anymore.
                     if (!stillHasDanger) {
                         hasDanger = false;
                     }
@@ -362,8 +388,9 @@ public class TrainLinkedList {
 
     /**
      * Searches the list for all ProductLoad objects with the indicated name and
-     * sums together their weight and value (Also keeps track of whether the product
-     * is dangerous or not), then prints a single ProductLoad record to the console.
+     * sums together their weight and value (Also keeps track of whether the
+     * product is dangerous or not), then prints a single ProductLoad record to
+     * the console.
      * 
      * @param name the name of the ProductLoad to find on the train.
      * 
@@ -383,9 +410,10 @@ public class TrainLinkedList {
         double valueMathched = 0;
         boolean danger = false;
 
-        // goes through the whole list and checks if the names equal the target name. if
-        // it does, then adds the weight and value to the total as well as increments
-        // itemsMatched and updates danger if the item is dangerous
+        // goes through the whole list and checks if the names equal the target
+        // name. If it does, then adds the weight and value to the total as well
+        // as increments itemsMatched and updates danger if the item is
+        // dangerous
         while (tempPointer != null) {
             ProductLoad load = tempPointer.getCar().getLoad();
 
@@ -401,26 +429,30 @@ public class TrainLinkedList {
 
         // prints out the number or cars matched and the load info
         if (itemsMatched != 0) {
-            System.out.println("The following products were found on " + itemsMatched + " cars:");
-            new ProductLoad(name, weightMatched, valueMathched, danger).printLoad();
+            System.out.println("The following products were found on " +
+                                itemsMatched + " cars:");
+            new ProductLoad(
+                    name, weightMatched, valueMathched, danger).printLoad();
         } else {
             System.out.println("There are no matches!");
         }
     }
 
     /**
-     * Removes all dangerous cars from the train using <code>.removeCursor()</code>,
-     * maintaining the order of the cars in the train.
+     * Removes all dangerous cars from the train using
+     * <code>.removeCursor()</code>, maintaining the order of the cars in the
+     * train.
      * 
      * @throws IllegalStateException if the list is empty
      */
     public void removeDangerousCars() throws IllegalStateException {
         if (cursor == null) {
-            throw new IllegalStateException("There are no elements in the list!");
+            throw new IllegalStateException(
+                                    "There are no elements in the list!");
         }
 
-        // starts at head and goes through whole list and checks of the car contains a
-        // dangerous node
+        // starts at head and goes through whole list and checks of the car 
+        // contains a dangerous node
         cursor = head;
 
         while (cursor != null) {
@@ -441,18 +473,22 @@ public class TrainLinkedList {
     }
 
     /**
-     * Prints a neatly formatted table of the car number, car length, car weight,
-     * load name, load weight, load value, and load dangerousness for all of the car
-     * on the train.
+     * Prints a neatly formatted table of the car number, car length,
+     * car weight, load name, load weight, load value, and load dangerousness
+     * for all of the car on the train.
      */
     public void printManifest() {
 
-        String headerString = ("\n    CAR:                                LOAD:");
+        String headerString = (
+                        "\n    CAR:                                LOAD:");
 
-        String tableHeaderString = String.format("\n      %s    %10s    %10s  | %25s    %10s    %10s    %s\n", "Num",
-                "Length (m)", "Weight (t)", "Name", "Weight (t)", "Value ($)", "Dangerous");
+        String tableHeaderString = String.format(
+                "\n      %s    %10s    %10s  | %25s    %10s    %10s    %s\n",
+                "Num", "Length (m)", "Weight (t)", "Name", "Weight (t)",
+                "Value ($)", "Dangerous");
 
-        String bigLine = "    ===================================+===================================================================\n";
+        String bigLine = "    ===================================+========"
+            + "===========================================================\n";
 
         String tableInsides = "";
 
@@ -461,21 +497,23 @@ public class TrainLinkedList {
 
         for (int i = 1; tempPointer != null; i++) {
 
-            // prints arrow if this is the node cursor is pointing to otherwise prints a
-            // space
+            // prints arrow if this is the node cursor is pointing to otherwise
+            // prints a space
             if (tempPointer == cursor) {
                 tableInsides += " -> ";
             } else {
                 tableInsides += "    ";
             }
 
-            tableInsides += String.format("%5d   %s\n", i, tempPointer.toString());
+            tableInsides += String.format(
+                                "%5d   %s\n", i, tempPointer.toString());
 
             // advance tempPointer
             tempPointer = tempPointer.getNext();
         }
 
-        System.out.println(headerString + tableHeaderString + bigLine + tableInsides);
+        System.out.println(
+                headerString + tableHeaderString + bigLine + tableInsides);
     }
 
     /**
@@ -496,7 +534,8 @@ public class TrainLinkedList {
             isDangerouString = "not dangerous";
         }
 
-        return String.format("Train: %d cars, %.2f meters, %.2f tons, $%.2f value, %s", totalCars, totalLength, totalWeight,
-                totalValue, isDangerouString);
+        return String.format(
+            "Train: %d cars, %,.2f meters, %,.2f tons, $%,.2f value, %s",
+            totalCars, totalLength, totalWeight, totalValue, isDangerouString);
     }
 }
