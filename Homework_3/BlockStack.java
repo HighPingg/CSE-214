@@ -3,7 +3,7 @@ package Homework_3;
 public class BlockStack {
 
     // The reference to the "top" of the stack or the "head" of the LinkedList
-    BlockStackNode top;
+    private BlockStackNode top;
 
     // The total number of elements currently inside the Stack
     private int size;

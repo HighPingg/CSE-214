@@ -69,6 +69,42 @@ public class Complexity {
     }
 
     /**
+     * Compares the size of this complexity to another given complexity and returns
+     * an integer according to whether or not this complexity is greater than, less
+     * than or equal to a given complexity.
+     * 
+     * @param complexity the complexity we are comparing this complexity to.
+     * 
+     * @return -1 if the given complexity is larger. 0 if the two complexities are
+     *         equal to each other. 1 if this complexity is larger.
+     */
+    public int compare(Complexity complexity) {
+
+        // if this complexity and the complexity we are comparing it to have the same
+        // nPower and logPower, then both these complexities are equal and we therefore
+        // return 0.
+        if (nPower == complexity.getNPower() && logPower == complexity.getLogPower()) {
+            return 0;
+        }
+
+        // First compares the nPowers. If the power of the given complexity is greater
+        // than this one's, then the given complexity will automatically be larger and
+        // we return -1.
+        if (nPower < complexity.getNPower()) {
+            return -1;
+
+            // If the nPowers match, but the given complexity's logPower is greater, then
+            // its complexity will also be greater and return -1.
+        } else if (nPower == complexity.getNPower() && logPower < complexity.getLogPower()) {
+            return -1;
+        }
+
+        // If all test cases didn't go through, then this complexity must be greater and
+        // return 1.
+        return 1;
+    }
+
+    /**
      * Returns a human readable Big-Oh notation as a string.
      * 
      * @return the Big-Oh notation as a String.
