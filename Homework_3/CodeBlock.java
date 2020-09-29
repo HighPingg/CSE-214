@@ -76,15 +76,13 @@ public class CodeBlock {
      * 
      * @param highestSubComplexity the value to set
      *                             <code>highestSubComplexity</code> to.
-     * 
-     * @param loopVariable         the value to set <code>loopVariable</code> to.
      */
-    public CodeBlock(String name, Complexity blockComplexity, Complexity highestSubComplexity, String loopVariable) {
+    public CodeBlock(String name, Complexity blockComplexity, Complexity highestSubComplexity) {
 
         this.name = name;
         this.blockComplexity = blockComplexity;
         this.highestSubComplexity = highestSubComplexity;
-        this.loopVariable = loopVariable;
+        this.loopVariable = null;
     }
 
     /**
@@ -160,4 +158,10 @@ public class CodeBlock {
         this.loopVariable = loopVariable;
     }
 
+    public Complexity totalComplexity() {
+        int nPower = blockComplexity.getNPower() + highestSubComplexity.getNPower();
+        int logPower = blockComplexity.getLogPower() + highestSubComplexity.getLogPower();
+
+        return new Complexity(nPower, logPower);
+    }
 }

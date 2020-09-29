@@ -126,10 +126,10 @@ public class Complexity {
 
         // if nPower or logPower is not equal to 1 or 0, it will concatenate ^ and the
         // power of its respective experssion to the String
-        if (nPower != 0 || nPower != 1) {
+        if (nPower != 0 && nPower != 1) {
             nPowerString += String.format("^%d", nPower);
         }
-        if (logPower != 0 || logPower != 1) {
+        if (logPower != 0 && logPower != 1) {
             logPowerString += String.format("^%d", logPower);
         }
 
@@ -137,11 +137,11 @@ public class Complexity {
         // expression into the Big-Oh expression
         if (nPower == 0) {
 
-            return String.format("O(log(n)^%s)", logPowerString);
+            return String.format("O(log(n)%s)", logPowerString);
 
         } else if (logPower == 0) {
 
-            return String.format("O(n^%s)", nPowerString);
+            return String.format("O(n%s)", nPowerString);
 
         }
 
