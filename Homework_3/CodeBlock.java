@@ -158,6 +158,12 @@ public class CodeBlock {
         this.loopVariable = loopVariable;
     }
 
+    /**
+     * Returns the total complexity of this block by adding the powers of the outer
+     * loop to the highest sub complexity of the inner loops.
+     * 
+     * @return the total complexity to this <code>CodeBlock</code>
+     */
     public Complexity totalComplexity() {
         int nPower = blockComplexity.getNPower() + highestSubComplexity.getNPower();
         int logPower = blockComplexity.getLogPower() + highestSubComplexity.getLogPower();

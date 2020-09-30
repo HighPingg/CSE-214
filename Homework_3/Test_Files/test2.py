@@ -18,7 +18,6 @@ def matrix_multiply(a, b, n):
             for k in N:
                 
                 c[i][j] += a[i][k]*b[k][j]
-            for l in log_N:
 
     # Return the matrix.
     return c
