@@ -9,8 +9,24 @@ public class PythonTracer {
     // Determines the indentation of each statement
     public static final int SPACE_COUNT = 4;
 
+    /**
+     * Returns an array of <code>String</code> where <code>str</code> is split into
+     * different parts using <code>c</code> (Ex: charSplit("f.2f.3khn.2", '.') ==
+     * {"f", "2f", "3khn", "2"}).This is basically the <code>String.split()</code>
+     * method, but it takes in a char and it also works with '.' while
+     * <code>String.split()</code> doesn't.
+     * 
+     * @param str the <code>String</code> we are trying to split up
+     * 
+     * @param c   the <code>char</code> where we split up <code>str</code>
+     * 
+     * @return the array where <code>str</code> is split up into different parts
+     *         using <code>c</code>
+     */
     public static String[] charSplit(String str, char c) {
 
+        // Goes through the string and determine how many matches we have with the
+        // character. matchCount + 1 will be the number of elements in the String array
         int matchCount = 0;
         for (int i = 0; i < str.length(); i++) {
             if (str.charAt(i) == c) {
@@ -18,13 +34,19 @@ public class PythonTracer {
             }
         }
 
+        // Goes through the String again character by character and adds to the array at
+        // index counter. When we encounter a match with the characcter, we add 1 to
+        // counter and move on to the next index.
         String[] arr = new String[matchCount + 1];
         int counter = 0;
-
         for (int i = 0; i < str.length(); i++) {
+            // if this spot in the array is null, then we need to initialize it with an
+            // empty String otherwise it will throw a null exception
             if (arr[counter] == null)
                 arr[counter] = "";
 
+            // if the charater doesn't match, then append to the array at the current index,
+            // otherwise increment counter.
             if (str.charAt(i) != c)
                 arr[counter] += str.charAt(i);
             else
@@ -67,6 +89,12 @@ public class PythonTracer {
 
         // Creates a new empty stack
         BlockStack stack = new BlockStack();
+
+        // previousName is neccessary for the print stack trace feature. Whenever we
+        // exit a codeblock, we lost the name of that block and therefore cannot keep
+        // track of the name of the codeblock we are entering next. previousName stores
+        // that name so whenever we detect an exited codeblock, we can update the name
+        // of the next codeblock accordingly.
         String previousName = "";
 
         while (fileIn.hasNextLine()) {
@@ -120,6 +148,8 @@ public class PythonTracer {
                         // of another word
                         String keywordWithSpaces = type.getType() + " ";
 
+                        // Matching the keyword to the line. We need to first make sure the length is
+                        // long enough otherwise we'll get an IndexOutOfBoundsException
                         if (nextLine.trim().length() > keywordWithSpaces.length()
                                 && nextLine.trim().substring(0, keywordWithSpaces.length()).equals(keywordWithSpaces)) {
                             keyword = type;
@@ -134,32 +164,43 @@ public class PythonTracer {
 
                     String name = "";
 
+                    // If the stack is empty, then we know it's the opening "def ():" and set name
+                    // to 1
                     if (stack.isEmpty()) {
 
                         name = "1";
 
                     } else {
 
+                        // splits the current and previous name and splits it
                         String[] currentNameArr = charSplit(stack.peek().getName(), '.');
                         String[] previousNameArr = charSplit(previousName, '.');
 
                         // for (String string : previousNameArr) {
-                        //     System.out.println(string);
+                        // System.out.println(string);
                         // }
 
                         // System.out.println(currentNameArr.length);
                         // System.out.println(previousName + " " + previousNameArr.length);
 
+                        // if the previous name's length is greater than the current, then we know that
+                        // we have exited a codeblock and we can go back out of the codeblock and add 1
+                        // to the name of the current codeblock.
                         if (currentNameArr.length < previousNameArr.length) {
 
-                            for (int i = 0; i < currentNameArr.length + 1; i++) {
-
+                            // Goes through the previousName array and appends those values to name until we
+                            // reach the length of the currentName array. This is the codeblock we backed
+                            // all the way out to. We then would add one to the last reference in the
+                            // previousName and append it to the name of the next codeblock.
+                            for (int i = 0; i <= currentNameArr.length; i++) {
                                 if (i == currentNameArr.length)
                                     name += String.valueOf(Integer.parseInt(previousNameArr[i]) + 1);
                                 else
                                     name += previousNameArr[i] + ".";
                             }
 
+                            // Else we know that we entered a sub-codeblock and we append ".1" to the
+                            // previous name
                         } else {
                             name = stack.peek().getName() + ".1";
                         }
@@ -168,6 +209,7 @@ public class PythonTracer {
                     previousName = name;
                     System.out.printf("\nEntering block %s \"%s\":\n", name, keyword.getType());
                     // System.out.printf("", );
+                    //TODO: BLOCK TRACKING PRINT TO CONSOLE
 
                     Complexity blockComplexity;
                     Complexity highestSubComplexity = new Complexity();
