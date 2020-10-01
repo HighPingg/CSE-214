@@ -9,6 +9,31 @@ public class PythonTracer {
     // Determines the indentation of each statement
     public static final int SPACE_COUNT = 4;
 
+    public static String[] charSplit(String str, char c) {
+
+        int matchCount = 0;
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == c) {
+                matchCount++;
+            }
+        }
+
+        String[] arr = new String[matchCount + 1];
+        int counter = 0;
+
+        for (int i = 0; i < str.length(); i++) {
+            if (arr[counter] == null)
+                arr[counter] = "";
+
+            if (str.charAt(i) != c)
+                arr[counter] += str.charAt(i);
+            else
+                counter++;
+        }
+
+        return arr;
+    }
+
     /**
      * Opens the indicated file and traces through the code of the Python function
      * contained within the file, returning the Big-Oh order of complexity of the
@@ -42,6 +67,7 @@ public class PythonTracer {
 
         // Creates a new empty stack
         BlockStack stack = new BlockStack();
+        String previousName = "";
 
         while (fileIn.hasNextLine()) {
             String nextLine = fileIn.nextLine();
@@ -107,6 +133,42 @@ public class PythonTracer {
                 if (keyword != null) {
 
                     String name = "";
+
+                    if (stack.isEmpty()) {
+
+                        name = "1";
+
+                    } else {
+
+                        String[] currentNameArr = charSplit(stack.peek().getName(), '.');
+                        String[] previousNameArr = charSplit(previousName, '.');
+
+                        // for (String string : previousNameArr) {
+                        //     System.out.println(string);
+                        // }
+
+                        // System.out.println(currentNameArr.length);
+                        // System.out.println(previousName + " " + previousNameArr.length);
+
+                        if (currentNameArr.length < previousNameArr.length) {
+
+                            for (int i = 0; i < currentNameArr.length + 1; i++) {
+
+                                if (i == currentNameArr.length)
+                                    name += String.valueOf(Integer.parseInt(previousNameArr[i]) + 1);
+                                else
+                                    name += previousNameArr[i] + ".";
+                            }
+
+                        } else {
+                            name = stack.peek().getName() + ".1";
+                        }
+                    }
+
+                    previousName = name;
+                    System.out.printf("\nEntering block %s \"%s\":\n", name, keyword.getType());
+                    // System.out.printf("", );
+
                     Complexity blockComplexity;
                     Complexity highestSubComplexity = new Complexity();
                     String loopVariable = null;
@@ -226,7 +288,7 @@ public class PythonTracer {
                     // All the errors are thrown here. If traceFile runs successfull, then it will
                     // print out the overall complexity.
                     Complexity overall = traceFile(userIn);
-                    System.out.println("Overall complexity of matrix_multiply: " + overall.toString());
+                    System.out.println("\n\nOverall complexity of matrix_multiply: " + overall.toString());
 
                 } catch (IllegalArgumentException e) {
                     System.out.println(e.getMessage());

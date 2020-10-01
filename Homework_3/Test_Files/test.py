@@ -50,7 +50,7 @@ def fun_declaration(params):
             print("Still inside the 'while' block.")
 
             # End of 'while' block.
-
+            
         print("Outside of the 'while' block, but still inside the"
               " 'for' block.")
 
