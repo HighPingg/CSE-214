@@ -8,10 +8,10 @@
  * 
  * 
  * @author Vincent Zheng
- *      Solar_ID: 113469839
- *      Email: vincent.zheng@stonybrook.edu
- *      Assignment: 3
- *      Course: CSE 214
- *      Recitation: R02
- *      TA: William Simunek
+ *      <li>Solar_ID: 113469839</li>
+ *      <li>Email: vincent.zheng@stonybrook.edu</li>
+ *      <li>Assignment: 3</li>
+ *      <li>Course: CSE 214</li>
+ *      <li>Recitation: R02</li>
+ *      <li>TA: William Simunek</li>
  */

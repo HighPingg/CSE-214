@@ -1,5 +1,20 @@
 package Homework_3;
 
+/**
+ * Describes a nested block of code. Keeps track of the <code>Complexity</code>
+ * of this block as well has its sub-code blocks. It also holds a
+ * <code>name</code> and <code>loopVariable</code> (only used for while loops).
+ * It also holds an <code>enum BLOCK_TYPES</code> that holds all possible
+ * <code>CodeBlock</code> types.
+ * 
+ * @author Vincent Zheng
+ *      <li>Solar_ID: 113469839</li>
+ *      <li>Email: vincent.zheng@stonybrook.edu</li>
+ *      <li>Assignment: 3</li>
+ *      <li>Course: CSE 214</li>
+ *      <li>Recitation: R02</li>
+ *      <li>TA: William Simunek</li>
+ */
 public class CodeBlock {
 
     /**
@@ -15,7 +30,8 @@ public class CodeBlock {
      */
     public static enum BLOCK_TYPES {
 
-        DEF("def"), FOR("for"), WHILE("while"), IF("if"), ELIF("elif"), ELSE("else");
+        DEF("def"), FOR("for"), WHILE("while"), IF("if"), ELIF("elif"),
+        ELSE("else");
 
         // Strores the String representation of the code block
         private String type;
@@ -45,8 +61,8 @@ public class CodeBlock {
     // Keeps track of the Big-Oh complexity of this block
     private Complexity blockComplexity;
 
-    // Keeps track of the Big-Oh complexity of the highest-order block nested within
-    // this block
+    // Keeps track of the Big-Oh complexity of the highest-order block nested
+    // within this block
     private Complexity highestSubComplexity;
 
     // Used only for while blocks. Stores its loop variable.
@@ -67,17 +83,20 @@ public class CodeBlock {
     }
 
     /**
-     * Overloader constructor initializes a new <code>CodeBlock</code> and sets its
-     * member variables to the given variables.
+     * Overloader constructor initializes a new <code>CodeBlock</code> and sets
+     * its member variables to the given variables.
      * 
      * @param name                 the value to set <code>name</code> to.
      * 
-     * @param blockComplexity      the value to set <code>blockComplexity</code> to.
+     * @param blockComplexity      the value to set <code>blockComplexity</code>
+     *                             to.
      * 
      * @param highestSubComplexity the value to set
      *                             <code>highestSubComplexity</code> to.
      */
-    public CodeBlock(String name, Complexity blockComplexity, Complexity highestSubComplexity) {
+    public CodeBlock(String name, Complexity blockComplexity,
+                    Complexity highestSubComplexity) 
+    {
 
         this.name = name;
         this.blockComplexity = blockComplexity;
@@ -159,14 +178,16 @@ public class CodeBlock {
     }
 
     /**
-     * Returns the total complexity of this block by adding the powers of the outer
-     * loop to the highest sub complexity of the inner loops.
+     * Returns the total complexity of this block by adding the powers of the
+     * outer loop to the highest sub complexity of the inner loops.
      * 
      * @return the total complexity to this <code>CodeBlock</code>
      */
     public Complexity totalComplexity() {
-        int nPower = blockComplexity.getNPower() + highestSubComplexity.getNPower();
-        int logPower = blockComplexity.getLogPower() + highestSubComplexity.getLogPower();
+        int nPower = blockComplexity.getNPower() + 
+                                        highestSubComplexity.getNPower();
+        int logPower = blockComplexity.getLogPower() +
+                                        highestSubComplexity.getLogPower();
 
         return new Complexity(nPower, logPower);
     }

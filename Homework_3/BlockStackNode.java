@@ -1,5 +1,19 @@
 package Homework_3;
 
+/**
+ * Node class for the Single LinkedList used in this assignment. It holds a
+ * reference to the next node as well as holds the <code>CodeBlock</code>
+ * contained in this Node. Also has all the necessary getter and setter
+ * functions needed to work the list.
+ * 
+ * @author Vincent Zheng
+ *      <li>Solar_ID: 113469839</li>
+ *      <li>Email: vincent.zheng@stonybrook.edu</li>
+ *      <li>Assignment: 3</li>
+ *      <li>Course: CSE 214</li>
+ *      <li>Recitation: R02</li>
+ *      <li>TA: William Simunek</li>
+ */
 public class BlockStackNode {
 
     // The reference to the next node in the list
@@ -9,8 +23,8 @@ public class BlockStackNode {
     private CodeBlock codeBlock;
 
     /**
-     * Initializes a new <code>BlockStackNode</code> while setting <code>next</code>
-     * and <code>codeBlock</code> to <code>null</code>.
+     * Initializes a new <code>BlockStackNode</code> while setting
+     * <code>next</code> and <code>codeBlock</code> to <code>null</code>.
      */
     public BlockStackNode() {
         next = null;
@@ -19,8 +33,8 @@ public class BlockStackNode {
 
     /**
      * Initializes a new <code>BlockStackNode</code> and sets the
-     * <code>codeBlock</code> to the given value while setting <code>next</code> to
-     * <code>null</code>.
+     * <code>codeBlock</code> to the given value while setting <code>next</code>
+     * to <code>null</code>.
      * 
      * @param codeBlock the value to set <code>codeBlock</code> to.
      */
