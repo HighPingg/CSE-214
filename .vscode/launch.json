@@ -1,0 +1,35 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug (Launch) - Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-PlannerManager<CSE-214_aae1df0c>",
+            "request": "launch",
+            "mainClass": "Homework_1.PlannerManager",
+            "projectName": "CSE-214_aae1df0c"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-TrainManager<CSE-214_aae1df0c>",
+            "request": "launch",
+            "mainClass": "Homework_2.TrainManager",
+            "projectName": "CSE-214_aae1df0c"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-PythonTracer<CSE-214_aae1df0c>",
+            "request": "launch",
+            "mainClass": "Homework_3.PythonTracer",
+            "projectName": "CSE-214_aae1df0c"
+        }
+    ]
+}
