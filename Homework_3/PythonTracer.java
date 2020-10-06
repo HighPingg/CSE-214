@@ -453,6 +453,8 @@ public class PythonTracer {
 
                 } catch (IllegalArgumentException e) {
                     System.out.println(e.getMessage());
+                } catch (IllegalStateException e) {
+                    System.out.println(e.getMessage());
                 } catch (FileNotFoundException e) {
                     System.out.println(e.getMessage());
                 } catch (Exception e) {
