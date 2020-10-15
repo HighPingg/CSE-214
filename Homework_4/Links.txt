@@ -1,4 +1,4 @@
-* Instructions: https://blackboard.stonybrook.edu/bbcswebdav/pid-5748340-dt-content-rid-47209613_1/courses/1208-CSE-214-SEC01-89077/hw4.html
+* Instructions: https://blackboard.stonybrook.edu/bbcswebdav/pid-5748340-dt-content-rid-47641891_1/courses/1208-CSE-214-SEC01-89077/hw4%281%29.html
 
 * Rubric: https://blackboard.stonybrook.edu/bbcswebdav/pid-5748340-dt-content-rid-47209689_1/courses/1208-CSE-214-SEC01-89077/hw4key.html
 
@@ -7,11 +7,11 @@
 /**
  * 
  * 
- * @author Vincent Zheng
- *      <li>Solar_ID: 113469839</li>
- *      <li>Email: vincent.zheng@stonybrook.edu</li>
- *      <li>Assignment: 4</li>
- *      <li>Course: CSE 214</li>
- *      <li>Recitation: R02</li>
- *      <li>TA: William Simunek</li>
+ * @author <b>Name</b>: Vincent Zheng
+ *      <li><b>Solar_ID:</b> 113469839</li>
+ *      <li><b>Email:</b> vincent.zheng@stonybrook.edu</li>
+ *      <li><b>Assignment:</b> 4</li>
+ *      <li><b>Course</b>: CSE 214</li>
+ *      <li><b>Recitation</b>: R02</li>
+ *      <li><b>TA</b>: William Simunek</li>
  */

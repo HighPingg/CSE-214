@@ -1,40 +1,43 @@
 package Homework_4;
 
-public class Router {
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Queue;
+@SuppressWarnings("all")
+
+/**
+ * This class represents a router in the network, which is ultimately a queue.
+ * It extends ArrayList and implements Queue. Contin general Queue methods such
+ * as enqueue and dequeue and uses the ArrayList storage.
+ * 
+ * @author <b>Name</b>: Vincent Zheng
+ *      <li><b>Solar_ID:</b> 113469839</li>
+ *      <li><b>Email:</b> vincent.zheng@stonybrook.edu</li>
+ *      <li><b>Assignment:</b> 4</li>
+ *      <li><b>Course</b>: CSE 214</li>
+ *      <li><b>Recitation</b>: R02</li>
+ *      <li><b>TA</b>: William Simunek</li>
+ */
+public class Router<Packet> extends ArrayList<Packet> implements Queue<Packet> {
 
     /**
-     * The reference to the <code>front</code> of the Queue or the head of the
-     * LinkedList. We dequeue from here.
+     * Default serial version UID
      */
-    private RouterNode front;
+    private static final long serialVersionUID = 1L;
 
     /**
-     * The reference to the <code>rear</code> of the Queue or the head of the
-     * LinkedList. We enqueue from here.
-     */
-    private RouterNode rear;
-
-    /**
-     * The total number of <code>Packets</code> inside this <code>Router</code>.
-     */
-    private int size;
-
-    /**
-     * The maximum amount of <code>Packets</code> allowed to be stored inside this
-     * <code>Router</code>.
+     * The maximum amount of <code>Packets</code> allowed to be stored inside
+     * this <code>Router</code>.
      */
     private int maxBufferSize;
 
     /**
-     * Default constructor initializes a new <code>Router</code>. It sets the
-     * <code>front</code> and <code>rear</code> references to <code>null</code>
-     * because there are no <code>Packets</code> currently inside the list while
-     * setting <code>size</code> to 0.
+     * Default constructor initializes a new <code>Router</code>. Calls
+     * <code>ArrayList</code>'s constructor to initialize a new
+     * <code>ArrayList</code>;
      */
     public Router(int maxBufferSize) {
-        this.front = null;
-        this.rear = null;
-        this.size = 0;
+        super();
         this.maxBufferSize = maxBufferSize;
     }
 
@@ -48,60 +51,41 @@ public class Router {
     }
 
     /**
-     * Adds a new Packet to the <code>rear</code> of the router buffer and
-     * increments <code>size</code> by 1.
+     * Adds a new Packet to the end of the router buffer.
      * 
-     * @param p the <code>Packet</code> we want to add into the Queue.
+     * @param packet
      */
-    public void enqueue(Packet p) {
-        RouterNode newNode = new RouterNode(p);
-
-        if (isEmpty()) {
-            front = newNode;
-            rear = newNode;
-        } else {
-            rear.setNext(newNode);
-            rear = newNode;
-        }
-
-        size++;
+    public void enqueue(Packet packet) {
+        add(packet);
     }
 
     /**
-     * Removes the first <code>Packet</code> in the router buffer and decrements
-     * <code>size</code> by 1.
+     * Removes the first <code>Packet</code> in the router buffer.
      * 
-     * @return The <code>Packet</code> that was just removed from the Queue.
+     * @return The element that was just removed from the queue.
      * 
-     * @throws IllegalStateException Thrown if the Queue is empty.
+     * @throws IllegalStateException If the router is empty
+     *                               (<code>size() == 0</code>).
      */
     public Packet dequeue() throws IllegalStateException {
         if (isEmpty())
-            throw new IllegalStateException("Cannot Dequeue. This Router is Empty!");
+            throw new IllegalStateException("The Router is Empty!");
 
-        // Return this value. This is the front of the Queue
-        Packet packet = peek();
-
-        if (front == rear) {
-            front = null;
-            rear = null;
-        } else {
-            front = front.getNext();
-        }
-
-        size--;
-
-        return packet;
+        return super.remove(0);
     }
 
     /**
      * Returns, but does not remove the first <code>Packet</code> in the router
      * buffer.
      * 
-     * @return The first <code>Packet</code> in the router buffer.
+     * @return the first <code>Packet</code> in the router buffer or
+     *         <code>null</code> the queue is empty.
      */
+    @Override
     public Packet peek() {
-        return front.getPacket();
+        if (isEmpty())
+            return null;
+        return get(0);
     }
 
     /**
@@ -111,43 +95,71 @@ public class Router {
      *         buffer.
      */
     public int size() {
-        return size;
+        return super.size();
     }
 
     /**
-     * Determines whether or no the Queue is empty.
+     * Determines whether or not the Queue is empty.
      * 
      * @return <b>true</b> if the <code>size</code> of the list is 0.
      *         <li><b>false</b> if the <code>size</code> of the list isn't 0.
      */
     public boolean isEmpty() {
-        return size == 0;
+        return super.size() == 0;
     }
 
     /**
-     * Loops through the list Intermediate routers. Find the router with the most
-     * free buffer space (contains least Packets), and return the index of the
-     * router.
+     * Loops through the list Intermediate <code>routers</code>. Find the router
+     * with the most free buffer space (contains least Packets), and return the
+     * index of the router.
      * 
-     * @param routers The list of routers that we are determining which one has the
-     *                most free buffer space.
+     * @param routers The list of routers that we are determining which one has
+     *                the most free buffer space.
      * 
      * @return The index of the router with the most free buffer space.
      * 
-     * @throws IllegalStateException If all routers are full.
+     * @throws IllegalStateException    If all <code>routers</code> are full.
+     * 
+     * @throws IllegalArgumentException If <code>routers</code> isn't an
+     *                                  instance of
+     *                                  <code>ArrayList<Router></code>
      */
-    public static int sendPacketTo(Router[] routers) throws IllegalStateException {
+    public static int sendPacketTo(Collection routers)
+                        throws IllegalStateException, IllegalArgumentException
+    {
+        // Casting into ArrayList
+        ArrayList arrayList;
+        if (routers instanceof ArrayList) {
+            arrayList = (ArrayList) routers;
+        } else {
+            throw new IllegalArgumentException(
+                                        "Parameter must be of type Arraylist!");
+        }
+
         int indexOfLeastBuffer = -1;
 
-        for (int i = 0; i < routers.length; i++) {
-            /*
-             * Changes the index of the router with the least buffer to i if and only if the
-             * router isn't full and it's the first router with space or the current router
-             * has more space than the router who's index was stored.
-             */
-            if (routers[i].size() < routers[i].getMaxBufferSize()
-                    && (indexOfLeastBuffer == -1 || routers[i].size() < routers[indexOfLeastBuffer].size())) {
+        for (int i = 0; i < arrayList.size(); i++) {
+            // Casting into a Router
+            Router router;
+            if (arrayList.get(i) instanceof Router) {
+                router = (Router) arrayList.get(i);
+            } else {
 
+                throw new IllegalArgumentException(
+                                "Parameter must be of type ArrayList<Router>");
+            }
+
+            /*
+             * Changes the index of the router with the least buffer to i if and
+             * only if the router isn't full and it's the first router with
+             * space or the current router has more space than the router who's
+             * index was stored.
+             */
+
+            if (router.size() < router.getMaxBufferSize() && 
+                    (indexOfLeastBuffer == -1 || router.size() <
+                    ((Router) arrayList.get(indexOfLeastBuffer)).size()))
+            {
                 indexOfLeastBuffer = i;
             }
         }
@@ -170,19 +182,72 @@ public class Router {
     public String toString() {
         String finalString = "{";
 
-        RouterNode nodePtr = front;
-        while (nodePtr != null) {
+        for (int i = 0; i < size(); i++) {
             // Add the node into the String
-            finalString += nodePtr.getPacket().toString();
-
-            // Move to the next node
-            nodePtr = nodePtr.getNext();
+            finalString += get(i).toString();
 
             // If no more nodes, print nothing, else add ", "
-            if (nodePtr != null)
+            if (i != size() - 1)
                 finalString += ", ";
         }
 
         return finalString + "}";
+    }
+
+    /**
+     * Appends the Packet into the ArrayList.
+     * 
+     * @param e The Packet to be added into the ArrayList.
+     * 
+     * @return true always.
+     */
+    @Override
+    public boolean offer(Packet e) {
+        add(e);
+        return true;
+    }
+
+    /**
+     * Retrieves and removes the head of this queue. This method differs from
+     * poll() only in that it throws an exception if this queue is empty.
+     * 
+     * @return the head of this queue.
+     * 
+     * @throws IllegalStateException If the list is empty.
+     */
+    @Override
+    public Packet remove() throws IllegalStateException {
+        if (isEmpty())
+            throw new IllegalStateException("List is Empty!");
+        return get(0);
+    }
+
+    /**
+     * Retrieves and removes the head of this queue, or returns null if this
+     * queue is empty.
+     * 
+     * @return the head of this queue, or null if this queue is empty
+     */
+    @Override
+    public Packet poll() {
+        if (isEmpty())
+            return null;
+        return get(0);
+    }
+
+    /**
+     * Retrieves, but does not remove, the head of this queue. This method
+     * differs from peek only in that it throws an exception if this queue is
+     * empty.
+     * 
+     * @return the head of this queue
+     * 
+     * @throws IllegalStateException When the List is empty.
+     */
+    @Override
+    public Packet element() throws IllegalStateException {
+        if(isEmpty())
+            throw new IllegalStateException("The List is Empty!");
+        return get(0);
     }
 }
