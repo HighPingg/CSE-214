@@ -221,16 +221,18 @@ public class Simulator {
              */
             for (int i = 0; i < routersArrayList.size(); i++) {
                 if (!routersArrayList.get(i).isEmpty() &&
-                            routersArrayList.get(i).peek().getTimeArrive() != time)
+                        routersArrayList.get(i).peek().getTimeArrive() != time)
                 {
-                    int timeToDest = routersArrayList.get(i).peek().getTimeToDest();
+                    int timeToDest =
+                                routersArrayList.get(i).peek().getTimeToDest();
 
                     if (timeToDest <= 1 && !finishedQueue.contains(i))
                         finishedQueue.add(i);
 
                     if (timeToDest != 0) {
                         timeToDest--;
-                        routersArrayList.get(i).peek().setTimeToDest(timeToDest);
+                        routersArrayList.get(i).peek().setTimeToDest(
+                                                                    timeToDest);
                     }
                 }
             }
@@ -241,7 +243,8 @@ public class Simulator {
              */
             for (int i = 0; i < bandwidth && !finishedQueue.isEmpty(); i++) {
                 int indexReachedDest = finishedQueue.remove(0);
-                Packet reachedDest = routersArrayList.get(indexReachedDest).dequeue();
+                Packet reachedDest = routersArrayList.get(
+                                                    indexReachedDest).dequeue();
 
                 int totalTimeInNetwork = time - reachedDest.getTimeArrive();
 
