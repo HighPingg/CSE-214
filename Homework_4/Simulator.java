@@ -1,6 +1,7 @@
 package Homework_4;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Scanner;
 
 /**
@@ -34,7 +35,7 @@ public class Simulator {
      * Level 2 <code>routers</code>. <code>Packets</code> are processed here and
      * wait to be shipped off to their destination.
      */
-    ArrayList<Router<Packet>> routers;
+    Collection<Router<Packet>> routers;
 
     /**
      * Contains the running sum of the total time each <code>Packet</code> is in
@@ -106,6 +107,8 @@ public class Simulator {
         this.minPacketSize = 0;
         this.maxPacketSize = 0;
         this.bandwidth = 0;
+        this.routers = new ArrayList<Router<Packet>>();
+        this.dispatcher = new Router<>(MAX_PACKETS);
     }
 
     /**
@@ -137,6 +140,8 @@ public class Simulator {
         this.minPacketSize = minPacketSize;
         this.maxPacketSize = maxPacketSize;
         this.bandwidth = bandwidth;
+        this.routers = new ArrayList<Router<Packet>>();
+        this.dispatcher = new Router<>(MAX_PACKETS);
     }
 
     /**
@@ -153,9 +158,10 @@ public class Simulator {
         Packet.packetCount = 0;
 
         // Populate/Reset the ArrayList to empty Routers
-        routers = new ArrayList<>();
+        ArrayList<Router<Packet>> routersArrayList =
+                                            (ArrayList<Router<Packet>>)routers;
         for (int i = 0; i < numIntRouters; i++) {
-            routers.add(new Router<Packet>(maxBufferSize));
+            routersArrayList.add(new Router<Packet>(maxBufferSize));
         }
 
         /*
@@ -172,7 +178,6 @@ public class Simulator {
              * function arrival to determine whether or not a Packet has arrived
              * and then nitialze a new Packet if it indeed has arrived.
              */
-            dispatcher = new Router<Packet>(MAX_PACKETS);
             for (int i = 0; i < MAX_PACKETS; i++) {
                 Packet newArrival = arrival(time);
                 if (newArrival != null) {
@@ -192,9 +197,9 @@ public class Simulator {
                 Packet newPacket = dispatcher.dequeue();
 
                 try {
-                    int index = Router.sendPacketTo(routers);
+                    int index = Router.sendPacketTo(routersArrayList);
 
-                    routers.get(index).enqueue(newPacket);
+                    routersArrayList.get(index).enqueue(newPacket);
                     System.out.printf("Packet %d sent to Router %d.\n",
                                     newPacket.getId(), index + 1);
                 } catch (IllegalStateException e) {
@@ -214,18 +219,18 @@ public class Simulator {
              * less than or equal to 1, queue it up in finishedQueue to be
              * dequeued.
              */
-            for (int i = 0; i < routers.size(); i++) {
-                if (!routers.get(i).isEmpty() &&
-                            routers.get(i).peek().getTimeArrive() != time)
+            for (int i = 0; i < routersArrayList.size(); i++) {
+                if (!routersArrayList.get(i).isEmpty() &&
+                            routersArrayList.get(i).peek().getTimeArrive() != time)
                 {
-                    int timeToDest = routers.get(i).peek().getTimeToDest();
+                    int timeToDest = routersArrayList.get(i).peek().getTimeToDest();
 
                     if (timeToDest <= 1 && !finishedQueue.contains(i))
                         finishedQueue.add(i);
 
                     if (timeToDest != 0) {
                         timeToDest--;
-                        routers.get(i).peek().setTimeToDest(timeToDest);
+                        routersArrayList.get(i).peek().setTimeToDest(timeToDest);
                     }
                 }
             }
@@ -236,7 +241,7 @@ public class Simulator {
              */
             for (int i = 0; i < bandwidth && !finishedQueue.isEmpty(); i++) {
                 int indexReachedDest = finishedQueue.remove(0);
-                Packet reachedDest = routers.get(indexReachedDest).dequeue();
+                Packet reachedDest = routersArrayList.get(indexReachedDest).dequeue();
 
                 int totalTimeInNetwork = time - reachedDest.getTimeArrive();
 
@@ -251,8 +256,8 @@ public class Simulator {
             /*
              * Print the routers in the list.
              */
-            for (int i = 1; i <= routers.size(); i++) {
-                System.out.printf("R%d: %s\n", i, routers.get(i - 1));
+            for (int i = 1; i <= routersArrayList.size(); i++) {
+                System.out.printf("R%d: %s\n", i, routersArrayList.get(i - 1));
             }
         }
 
