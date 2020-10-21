@@ -127,26 +127,43 @@ public class DirectoryNode {
         if (isFile)
             throw new NotADirectoryException("The Current Node is a File!");
 
+        // Checks the left, middle and right nodes for an empty spot. If there is, then
+        // sets it to newNode, else throws FullDirectoryException
         if (left == null) {
             left = newNode;
-            return;
-        } else {
-
-        }
-
-        if (middle == null) {
+            System.out.println("left");
+        } else if (middle == null) {
             middle = newNode;
-            return;
-        } else {
 
-        }
-
-        if (right == null) {
+            System.out.println("mid");
+        } else if (right == null) {
             right = newNode;
-            return;
+            System.out.println("right");
         } else {
-
+            throw new FullDirectoryException("This Directory is Full!");
         }
     }
 
+    public void printChildren(int depth) {
+
+        for (int i = 0; i < depth; i++)
+            System.out.print("\t");
+        if (isFile) {
+            System.out.println("- " + name);
+        } else {
+            System.out.println("|- " + name);
+        }
+
+        if (left != null) {
+            left.printChildren(depth + 1);
+        }
+
+        if (middle != null) {
+            middle.printChildren(depth + 1);
+        }
+
+        if (right != null) {
+            right.printChildren(depth + 1);
+        }
+    }
 }

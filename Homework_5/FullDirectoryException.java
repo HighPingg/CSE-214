@@ -19,5 +19,4 @@ public class FullDirectoryException extends Exception {
     public FullDirectoryException(String s) {
         super(s);
     }
-
 }
