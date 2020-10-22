@@ -12,7 +12,7 @@ public class DirectoryTree {
      * 
      * <p>
      * <b>Postcondition:</b> The tree contains a single DirectoryNode named "root",
-     * and both cursor and root reference this node.
+     * and both <code>cursor</code> and root reference this node.
      * </p>
      */
     public DirectoryTree() {
@@ -23,70 +23,104 @@ public class DirectoryTree {
     }
 
     /**
-     * Moves the cursor to the root node of the tree.
+     * Moves the <code>cursor</code> to the root node of the tree.
      * 
      * <p>
-     * <b>Postcondition:</b> The cursor now references the root node of the tree.
+     * <b>Postcondition:</b> The <code>cursor</code> now references the root node of
+     * the tree.
      * </p>
      */
     public void resetCursor() {
         cursor = root;
     }
 
-    public void changeDirectoryHelper(String name) throws NotADirectoryException {
-        changeDirectory(name, cursor);
-    }
+    /**
+     * Moves the <code>cursor</code> to the directory with the name indicated by
+     * <code>name</code>.
+     * 
+     * @param name The path of the node.
+     * 
+     * @throws NotADirectoryException If name references a file or cannot be found.
+     */
+    public void changeDirectory(String name) throws NotADirectoryException {
 
-    private void changeDirectory(String name, DirectoryNode nodePtr) throws NotADirectoryException {
+        // Splits name into an array by the '/'. nodePtr is a temporary pointer so we
+        // don't change cursor unless nodePtr is able to find path to the node.
         String[] nameArr = name.split("/");
+        DirectoryNode nodePtr = cursor;
 
+        // if the first node is root, then we set nodePtr to root and then take out root
+        // in path using removeFirstElement(). If "root" is the only thing in the path,
+        // then we reset cursor and exit without calling the helper.
         if (nameArr[0].equals("root")) {
             nodePtr = root;
             nameArr = removeFirstElement(nameArr);
 
             if (nameArr.length == 0) {
-                cursor = nodePtr;
+                resetCursor();
                 return;
             }
         }
 
-        for (int i = 0; i < nameArr.length; i++)
-            System.out.println(nameArr[i]);
-
-        if (nodePtr.getLeft() != null && nodePtr.getLeft().getName().equals(nameArr[0])) {
-            nodePtr = nodePtr.getLeft();
-            nameArr = removeFirstElement(nameArr);
-
-            if (nameArr.length != 0) {
-                changeDirectory(arrToString(nameArr), nodePtr);
-            }
-
-        } else if (nodePtr.getMiddle() != null && nodePtr.getMiddle().getName().equals(nameArr[0])) {
-            System.out.println("mid");
-            nodePtr = nodePtr.getMiddle();
-            nameArr = removeFirstElement(nameArr);
-
-            if (nameArr.length != 0) {
-                changeDirectory(arrToString(nameArr), nodePtr);
-            }
-
-        } else if (nodePtr.getMiddle() != null && nodePtr.getRight().getName().equals(nameArr[0])) {
-            System.out.println("righ");
-            nodePtr = nodePtr.getRight();
-            nameArr = removeFirstElement(nameArr);
-
-            if (nameArr.length != 0) {
-                changeDirectory(arrToString(nameArr), nodePtr);
-            }
-
-        } else {
-            throw new NotADirectoryException("The System Cannot Find the Given Path.");
-        }
-
-        if (nameArr.length == 0)
-            cursor = nodePtr;
+        changeDirectoryHelper(nameArr, nodePtr);
     }
 
+    /**
+     * Helper recursive function that finds a node given a path in
+     * <code>nameArr</code> and a temporary <code>nodePtr</code>. Once we find the
+     * node and it's not a file, set <code>cursor</code> to that node.
+     * 
+     * @param nameArr The directory path to the node.
+     * 
+     * @param nodePtr The temporary pointer used to traverse through the tree.
+     * 
+     * @throws NotADirectoryException Thrown if the path points towards a file, or
+     *                                the path cannot be found.
+     */
+    private void changeDirectoryHelper(String[] nameArr, DirectoryNode nodePtr) throws NotADirectoryException {
+
+        // foundReference is a flag. True if the path exists, false if we cannot find
+        // it. Iterate through all references inside the node and then remove the found
+        // path in nameArr, and then call the helper again with the updated nameArr and
+        // nodePtr.
+        boolean foundReference = false;
+        for (int i = 0; !foundReference && i < DirectoryNode.MAX_CHILDREN; i++) {
+            DirectoryNode node = nodePtr.getChild(i);
+
+            if (node != null && node.getName().equals(nameArr[0])) {
+                foundReference = true;
+                nodePtr = node;
+                nameArr = removeFirstElement(nameArr);
+
+                if (nameArr.length != 0) {
+                    changeDirectoryHelper(nameArr, nodePtr);
+                }
+            }
+        }
+
+        // If we couldn't find the path, throw an error and exit the recursion.
+        if (!foundReference)
+            throw new NotADirectoryException("The System Cannot Find the Given Path.");
+
+        // We found the directory, we check whether or not it is a file. If it's a file,
+        // then we throw an exception and exit the recursion. Otherwise, set the cursor
+        // to nodePtr and then exit recursion.
+        if (nameArr.length == 0) {
+            if (nodePtr.isFile())
+                throw new NotADirectoryException("This Path is a File!");
+
+            cursor = nodePtr;
+        }
+    }
+
+    /**
+     * Removes the first element in a given <code>String[]</code> array.
+     * 
+     * @param arr The array where we want to remove the first <code>String[]</code>
+     *            element.
+     * 
+     * @return The <code>arr</code> with the first element removed.
+     */
     private String[] removeFirstElement(String[] arr) {
 
         String[] arrCopy = new String[arr.length - 1];
@@ -98,46 +132,85 @@ public class DirectoryTree {
         return arrCopy;
     }
 
-    private String arrToString(String[] arr) {
-        String str = "";
-        for (int i = 0; i < arr.length; i++) {
-            if (i == arr.length - 1)
-                str += arr[i];
-            else
-                str += arr[i] + "/";
-        }
-        return str;
-    }
-
     public String presentWorkingDirectory() {
         // TODO Finish presentWorkingDirectory()
     }
 
+    /**
+     * Returns a String containing a space-separated list of names of all the child
+     * directories or files of the <code>cursor</code>.
+     * 
+     * @return the list of children of the <code>cursor</code>.
+     */
     public String listDirectory() {
         String dir = "";
 
-        if (cursor.getLeft() != null)
-            dir += cursor.getLeft().getName() + " ";
-
-        if (cursor.getMiddle() != null)
-            dir += cursor.getMiddle().getName() + " ";
-
-        if (cursor.getRight() != null)
-            dir += cursor.getRight().getName();
+        for (int i = 0; i < DirectoryNode.MAX_CHILDREN; i++) {
+            if (cursor.getChild(i) != null) {
+                dir += cursor.getChild(i).getName() + " ";
+            }
+        }
 
         return dir;
     }
 
+    /**
+     * Prints a formatted nested list of <code>names</code> of all the nodes in the
+     * directory tree, starting from the <code>cursor</code>.
+     */
     public void printDirectoryTree() {
         root.printChildren(0);
     }
-
-    public void makeDirectory(String name)
-            throws IllegalArgumentException, FullDirectoryException, NotADirectoryException {
-        cursor.addChild(new DirectoryNode(name, false));
+//TODO Check if name is valid or no
+    /**
+     * Creates a directory with the indicated <code>name</code> and adds it to the
+     * children of the cursor node.
+     * 
+     * @param name The <code>name</code> of the new directory.
+     * 
+     * @throws IllegalArgumentException Thrown if the <code>name</code> argument is
+     *                                  invalid.
+     * 
+     * @throws FullDirectoryException   Thrown if all child references of this
+     *                                  directory are occupied.
+     */
+    public void makeDirectory(String name) throws IllegalArgumentException, FullDirectoryException {
+        try {
+            cursor.addChild(new DirectoryNode(name, false));
+        } catch (NotADirectoryException e) {
+            System.out.println(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        } catch (FullDirectoryException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
-    public void makeFile(String name) throws IllegalArgumentException, FullDirectoryException, NotADirectoryException {
-        cursor.addChild(new DirectoryNode(name, true));
+    /**
+     * Creates a file with the indicated <code>name</code> and adds it to the
+     * children of the cursor node.
+     * 
+     * @param name The <code>name</code> of the new file.
+     * 
+     * @throws IllegalArgumentException Thrown if the <code>name</code> argument is
+     *                                  invalid.
+     * 
+     * @throws FullDirectoryException   Thrown if all child references of this
+     *                                  directory are occupied.
+     */
+    public void makeFile(String name) throws IllegalArgumentException, FullDirectoryException {
+        try {
+            cursor.addChild(new DirectoryNode(name, true));
+        } catch (NotADirectoryException e) {
+            System.out.println(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        } catch (FullDirectoryException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        } catch (Exception e) {
+            throw e;
+        }
     }
 }

@@ -32,7 +32,7 @@ public class BashTerminal {
 
                         break;
                     case "cd":
-                        directory.changeDirectoryHelper(userIn[1]);
+                        directory.changeDirectory(userIn[1]);
                         break;
                     case "mkdir":
 

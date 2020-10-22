@@ -3,24 +3,19 @@ package Homework_5;
 public class DirectoryNode {
 
     /**
+     * The maximum number of children a node can have.
+     */
+    public static final int MAX_CHILDREN = 10;
+
+    /**
      * The name of this file/folder.
      */
     private String name;
 
     /**
-     * The left child of this <code>DirectoryNode</code>.
+     * The children of this <code>DirectoryNode</code>.
      */
-    private DirectoryNode left;
-
-    /**
-     * The middle child of this tree node.
-     */
-    private DirectoryNode middle;
-
-    /**
-     * The right child of this tree node.
-     */
-    private DirectoryNode right;
+    private DirectoryNode[] children;
 
     /**
      * Differentiates whether or not this node is a file or folder:
@@ -33,22 +28,19 @@ public class DirectoryNode {
 
     /**
      * Default contructor initializes a new <code>DirectoryNode</code> object with
-     * the <code>left</code>, <code>middle</code>, and <code>right</code> references
-     * set to <code>null</code> while setting <code>name</code> to an empty
-     * <code>String</code> and <code>isFile</code> to <code>true</code>.
+     * the <code>children</code> set to <code>null</code> while setting
+     * <code>name</code> to an empty <code>String</code> and <code>isFile</code> to
+     * <code>true</code>.
      */
     public DirectoryNode() {
         this.name = "";
-        this.left = null;
-        this.middle = null;
-        this.right = null;
+        this.children = new DirectoryNode[MAX_CHILDREN];
         this.isFile = true;
     }
 
     /**
      * Overloader constructor sets <code>name</code> and <code>isFile</code> to the
-     * given values while setting the <code>left</code>, <code>middle</code>, and
-     * <code>right</code> references to <code>null</code>.
+     * given values while setting the <code>children</code> to <code>null</code>.
      * 
      * @param name   The name of this <code>DirectoryNode</code>.
      * 
@@ -57,9 +49,7 @@ public class DirectoryNode {
      */
     public DirectoryNode(String name, boolean isFile) {
         this.name = name;
-        this.left = null;
-        this.middle = null;
-        this.right = null;
+        this.children = new DirectoryNode[MAX_CHILDREN];
         this.isFile = isFile;
     }
 
@@ -80,6 +70,105 @@ public class DirectoryNode {
     public void setName(String name) {
         this.name = name;
     }
+
+    /**
+     * Return whether or not this <code>DirectoryNode</code> is a file or not.
+     * 
+     * @return <b>true</b> if this <code>DirectoryNode</code> is a file.
+     *         <li><b>false</b> if this <code>DirectoryNode</code> is a folder.</li>
+     */
+    public boolean isFile() {
+        return isFile;
+    }
+
+    /**
+     * Returns the <code>DirectoryNode</code> child corresponding to
+     * <code>index</code>.
+     * 
+     * @return the <code>DirectoryNode</code> child at <code>index</code>.
+     * 
+     * @throws IllegalArgumentException If <code>index</code> is out of bounds.
+     */
+    public DirectoryNode getChild(int index) throws IllegalArgumentException {
+        if (index < 0 || index >= MAX_CHILDREN)
+            throw new IllegalArgumentException("The index of getChild() Out-Of-Bounds");
+
+        return children[index];
+    }
+
+    /**
+     * Adds <code>newChild</code> to any of the open child positions of this node
+     * <code>children</code> checked from left to right order.
+     * 
+     * @param newNode The new <code>DirectoryNode</code> to add as a child to this
+     *                node.
+     * 
+     * @throws FullDirectoryException Thrown if all child references of this
+     *                                directory are occupied.
+     * 
+     * @throws NotADirectoryException Thrown if the current node is a file, as files
+     *                                cannot contain DirectoryNode references (i.e.
+     *                                all files are leaves).
+     */
+    public void addChild(DirectoryNode newNode) throws FullDirectoryException, NotADirectoryException {
+        if (isFile)
+            throw new NotADirectoryException("The Current Node is a File!");
+
+        // Checks children for an empty spot. If there is, then
+        // sets it to newNode, else throws FullDirectoryException
+
+        for (int i = 0; i < children.length; i++) {
+            if (children[i] == null) {
+                children[i] = newNode;
+                return;
+            }
+        }
+
+        throw new FullDirectoryException("This Directory is Full!");
+    }
+
+    /**
+     * Recursively prints out the current <code>DirectoryNode</code> and its entire
+     * subtree.
+     * 
+     * @param depth the depth that the current <code>DirectoryNode</code> is in.
+     *              This corresponds to the number of tabs that will be in front of
+     *              the <code>DirectoryNode</code> when it prints.
+     */
+    public void printChildren(int depth) {
+
+        // Print out spaces in front of the file/folder according to its depth in the
+        // tree.
+        for (int i = 0; i < depth; i++)
+            System.out.print("\t");
+        if (isFile) {
+            System.out.println("- " + name);
+        } else {
+            System.out.println("|- " + name);
+        }
+
+        // Loops through children and prints out all its children
+        for (int i = 0; i < children.length; i++) {
+            if (children[i] != null) {
+                children[i].printChildren(depth + 1);
+            }
+        }
+    }
+
+    /**
+     * The left child of this <code>DirectoryNode</code>.
+     */
+    private DirectoryNode left;
+
+    /**
+     * The middle child of this tree node.
+     */
+    private DirectoryNode middle;
+
+    /**
+     * The right child of this tree node.
+     */
+    private DirectoryNode right;
 
     /**
      * Returns the left <code>DirectoryNode</code> child.
@@ -106,64 +195,5 @@ public class DirectoryNode {
      */
     public DirectoryNode getRight() {
         return right;
-    }
-
-    /**
-     * Adds <code>newChild</code> to any of the open child positions of this node
-     * (<code>left</code>, <code>middle</code>, or <code>right</code>) checked from
-     * left to right order.
-     * 
-     * @param newNode The new <code>DirectoryNode</code> to add as a child to this
-     *                node.
-     * 
-     * @throws FullDirectoryException Thrown if all child references of this
-     *                                directory are occupied.
-     * 
-     * @throws NotADirectoryException Thrown if the current node is a file, as files
-     *                                cannot contain DirectoryNode references (i.e.
-     *                                all files are leaves).
-     */
-    public void addChild(DirectoryNode newNode) throws FullDirectoryException, NotADirectoryException {
-        if (isFile)
-            throw new NotADirectoryException("The Current Node is a File!");
-
-        // Checks the left, middle and right nodes for an empty spot. If there is, then
-        // sets it to newNode, else throws FullDirectoryException
-        if (left == null) {
-            left = newNode;
-            System.out.println("left");
-        } else if (middle == null) {
-            middle = newNode;
-
-            System.out.println("mid");
-        } else if (right == null) {
-            right = newNode;
-            System.out.println("right");
-        } else {
-            throw new FullDirectoryException("This Directory is Full!");
-        }
-    }
-
-    public void printChildren(int depth) {
-
-        for (int i = 0; i < depth; i++)
-            System.out.print("\t");
-        if (isFile) {
-            System.out.println("- " + name);
-        } else {
-            System.out.println("|- " + name);
-        }
-
-        if (left != null) {
-            left.printChildren(depth + 1);
-        }
-
-        if (middle != null) {
-            middle.printChildren(depth + 1);
-        }
-
-        if (right != null) {
-            right.printChildren(depth + 1);
-        }
     }
 }
