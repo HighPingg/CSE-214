@@ -3,12 +3,18 @@ package Homework_5;
 import java.util.Scanner;
 
 public class BashTerminal {
+
+    /**
+     * Runs a program which takes user input and builds a DirectoryTree using the
+     * valid bash commands.
+     */
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
         DirectoryTree directory = new DirectoryTree();
         System.out.println("Starting bash terminal.");
 
+        // Flag variable turns true when user enters "exit" and stops the loop.
         boolean userQuit = false;
         do {
             System.out.print("$ ");
@@ -62,8 +68,8 @@ public class BashTerminal {
 
                         break;
                     case "find":
-                        
-                        if(userIn.length == 2) {
+
+                        if (userIn.length == 2) {
                             System.out.println(directory.findInTree(userIn[1]));
                         }
 
@@ -85,6 +91,14 @@ public class BashTerminal {
                             throw new IllegalArgumentException(
                                     String.format("%s has more than one arguments!", userString));
 
+                        break;
+                    case "mv":
+
+                        if (userIn.length == 3)
+                            directory.moveDirectory(userIn[1], userIn[2]);
+                        else
+                            throw new IllegalArgumentException(
+                                    String.format("%s has more than two arguments!", userString));
                         break;
                     case "exit":
 

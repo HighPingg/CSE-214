@@ -165,13 +165,17 @@ public class DirectoryTree {
     }
 
     /**
-     * TODO javadoc
+     * Changes the <code>cursor</code> to the parent of the current node. This is
+     * done by using <code>presentWorkingDirectory</code>, removing the last
+     * <code>name</code> from it and changing directory to it.
      * 
-     * @throws IllegalArgumentException
+     * @throws IllegalStateException  If the <code>cursor</code> is already at the
+     *                                <code>root</code>.
      * 
-     * @throws NotADirectoryException
+     * @throws NotADirectoryException If the directory can't be found or the path
+     *                                leads to a file.
      */
-    public void moveToPreviousNode() throws IllegalArgumentException, NotADirectoryException {
+    public void moveToPreviousNode() throws IllegalStateException, NotADirectoryException {
         if (cursor == root)
             throw new IllegalStateException("The Cursor is at the root");
 
@@ -272,10 +276,22 @@ public class DirectoryTree {
         }
     }
 
+    /**
+     * Finds a node in the tree given its name. Uses its helper function to do the
+     * searching.
+     * 
+     * @param name The name of the node we are trying to find.
+     * 
+     * @return The path to the node if it is found in the tree.
+     * 
+     * @throws IllegalArgumentException If the node cannot be found in the tree.
+     */
     public String findInTree(String name) throws IllegalArgumentException {
         if (name.contains("/") || name.contains(" "))
             throw new IllegalArgumentException("name Contains Illegal Characters!");
 
+        // If the correct IllegalCallerException is thrown, return the stored path in
+        // message.
         try {
             findInTreeHelper(root, "", name);
         } catch (IllegalCallerException e) {
@@ -284,14 +300,32 @@ public class DirectoryTree {
             throw e;
         }
 
-        throw new IllegalArgumentException("No such file exists!");
+        // If nothing has happened after caling findInTreeHelper(), then the node wasn't
+        // found and throw the exception.
+        throw new IllegalArgumentException("No such file/directory exists!");
     }
 
-    public void findInTreeHelper(DirectoryNode nodePtr, String pathTaken, String name) {
+    /**
+     * Recursively finds the the node that matches the given <code>name</code>.
+     * Throws an <code>IllegalCallerException</code> if the node is found and stores
+     * the path to the node in the message of the
+     * <code>IllegalCallerException</code>. Else if the node is not found do
+     * nothing.
+     * 
+     * @param nodePtr   The current node that nodePtr is on.
+     * 
+     * @param pathTaken The path taken to get to nodePtr.
+     * 
+     * @param name      The name of the node we are trying to find.
+     */
+    private void findInTreeHelper(DirectoryNode nodePtr, String pathTaken, String name) {
+        // If the node is found, throw an exception with the path to it as the message
+        // and stop the function.
         if (nodePtr.getName().equals(name)) {
             throw new IllegalCallerException((pathTaken + "/" + name).substring(1));
         }
 
+        // Goes through all children and checks whether or not they match the name.
         for (int i = 0; i < DirectoryNode.MAX_CHILDREN; i++) {
             if (nodePtr.getChild(i) != null) {
                 findInTreeHelper(nodePtr.getChild(i), pathTaken + "/" + nodePtr.getName(), name);
@@ -300,17 +334,17 @@ public class DirectoryTree {
     }
 
     /**
-     * TODO javadoc
+     * Removes the last reference in the given path.
      * 
-     * @param str
+     * @param str The path to remove the last reference.
      * 
-     * @return
+     * @return The path with the removed reference.
      * 
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException If the <code>String</code> is empty.
      */
     private String removeLastDirectory(String str) throws IllegalArgumentException {
-        if (!str.contains("/"))
-            throw new IllegalArgumentException("This Parent has no Children!");
+        if (str.equals(" "))
+            throw new IllegalArgumentException("Empty Path!");
 
         int indexOfLastSlash = str.length() - 1;
         while (str.charAt(indexOfLastSlash) != '/') {
@@ -318,5 +352,66 @@ public class DirectoryTree {
         }
 
         return str.substring(0, indexOfLastSlash);
+    }
+
+    /**
+     * Moves the node <code>from</code> is referencing to the <code>to</code>
+     * directory. Maintains the node that <code>cursor</code> is currently pointed
+     * towards.
+     * 
+     * @param from The node that we want to move.
+     * 
+     * @param to   The directory that we want to move the node to.
+     * 
+     * @throws NotADirectoryException If the nodes cannot be found or if
+     *                                <code>to</code> references a file.
+     * 
+     * @throws FullDirectoryException If the <code>to</code> node is full.
+     */
+    public void moveDirectory(String from, String to) throws NotADirectoryException, FullDirectoryException {
+        DirectoryNode returnTo = cursor;
+
+        // Get the name of the node we are moving
+        String[] arr = from.split("/");
+        String name = arr[arr.length - 1];
+
+        try {
+            // Change directory to the node before the one we want to move to because it may
+            // be a file and an error is thrown, but its parent node must be a directory.
+            changeDirectory(removeLastDirectory(from));
+
+            // Moves the cursor up to the node we want to remove if it can be found. If it
+            // cannot be found, then throw an error.
+            for (int i = 0; i < DirectoryNode.MAX_CHILDREN; i++) {
+                if (cursor.getChild(i) != null && cursor.getChild(i).getName().equals(name)) {
+                    cursor = cursor.getChild(i);
+                    break;
+                } else if (i == DirectoryNode.MAX_CHILDREN - 1) {
+                    throw new NotADirectoryException("The System Cannot Find the Given Path!");
+                }
+            }
+
+            // Save the location of the node we want to remove and change the cursor to the
+            // move to location.
+            DirectoryNode fromNode = cursor;
+            changeDirectory(to);
+
+            // Add the node to the to node and remove the from node. This is node by moving
+            // the cursor to from's parent and calling DirectoryNode.remove().
+            cursor.addChild(fromNode);
+            changeDirectory(removeLastDirectory(from));
+            cursor.removeNode(name);
+
+            // Restore the location of cursor to the return location. Also restores
+            // presentWorkingDirectory because using changeDirectory().
+            changeDirectory(findInTree(returnTo.getName()));
+        } catch (Exception e) {
+
+            // Restore the location of cursor to the return location. Also restores
+            // presentWorkingDirectory because using changeDirectory().
+            changeDirectory(findInTree(returnTo.getName()));
+
+            throw e;
+        }
     }
 }

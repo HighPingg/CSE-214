@@ -134,6 +134,25 @@ public class DirectoryNode {
     }
 
     /**
+     * Removes the node in children corresponding to the given name.
+     * 
+     * @param name The name of the node to remove.
+     * 
+     * @throws NotADirectoryException If the node cannot be found in the children of
+     *                                this node.
+     */
+    public void removeNode(String name) throws NotADirectoryException {
+        for (int i = 0; i < children.length; i++) {
+            if (children[i] != null && children[i].getName().equals(name)) {
+                children[i] = null;
+                return;
+            }
+        }
+
+        throw new NotADirectoryException("The Node Isn't In the Parent!");
+    }
+
+    /**
      * Recursively prints out the current <code>DirectoryNode</code> and its entire
      * subtree.
      * 
