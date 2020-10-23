@@ -2,13 +2,26 @@ package Homework_5;
 
 public class DirectoryTree {
 
+    /**
+     * The current node that cursor is pointing towards.
+     */
     private DirectoryNode cursor;
 
+    /**
+     * The path of the node that cursor is referencing.
+     */
+    private String presentWorkingDirectory;
+
+    /**
+     * The root node of this tree.
+     */
     private DirectoryNode root;
 
     /**
      * Initializes a <code>DirectoryTree</code> object with a single
-     * <code>DirectoryNode</code> named <i>"root"</i>.
+     * <code>DirectoryNode</code> named <i>"root"</i> and sets
+     * <code>presentWorkingDirectory</code> to the name of the <code>root</code>
+     * node.
      * 
      * <p>
      * <b>Postcondition:</b> The tree contains a single DirectoryNode named "root",
@@ -18,12 +31,15 @@ public class DirectoryTree {
     public DirectoryTree() {
         DirectoryNode newNode = new DirectoryNode("root", false);
 
+        presentWorkingDirectory = newNode.getName();
         root = newNode;
         cursor = newNode;
     }
 
     /**
-     * Moves the <code>cursor</code> to the root node of the tree.
+     * Moves the <code>cursor</code> to the root node of the tree and sets
+     * <code>presentWorkingDirectory</code> to the name of the <code>root</code>
+     * node.
      * 
      * <p>
      * <b>Postcondition:</b> The <code>cursor</code> now references the root node of
@@ -32,11 +48,13 @@ public class DirectoryTree {
      */
     public void resetCursor() {
         cursor = root;
+        presentWorkingDirectory = root.getName();
     }
 
     /**
      * Moves the <code>cursor</code> to the directory with the name indicated by
-     * <code>name</code>.
+     * <code>name</code> and updates <code>presentWorkingDirectory</code> if the
+     * directory was successfully found.
      * 
      * @param name The path of the node.
      * 
@@ -63,6 +81,20 @@ public class DirectoryTree {
         }
 
         changeDirectoryHelper(nameArr, nodePtr);
+
+        // Gets rid of the '/' at the end if there is one
+        if (name.substring(name.length() - 1).equals("/")) {
+            name = name.substring(0, name.length() - 1);
+        }
+
+        // Updating presentWorkingDirectory. If it's an absolute path, then sets
+        // presentWorkingDirectory to name. Else append name to presentWorkingDirectory.
+        if (name.length() > root.getName().length()
+                && name.substring(0, root.getName().length()).equals(root.getName())) {
+            presentWorkingDirectory = name;
+        } else {
+            presentWorkingDirectory += "/" + name;
+        }
     }
 
     /**
@@ -132,8 +164,26 @@ public class DirectoryTree {
         return arrCopy;
     }
 
+    /**
+     * TODO javadoc
+     * 
+     * @throws IllegalArgumentException
+     * 
+     * @throws NotADirectoryException
+     */
+    public void moveToPreviousNode() throws IllegalArgumentException, NotADirectoryException {
+        if (cursor == root)
+            throw new IllegalStateException("The Cursor is at the root");
+
+        changeDirectory(removeLastDirectory(presentWorkingDirectory));
+    }
+
+    /**
+     * Returns a String containing the path of directory names from the root node of
+     * the tree to the cursor, with each name separated by a forward slash "/".
+     */
     public String presentWorkingDirectory() {
-        // TODO Finish presentWorkingDirectory()
+        return presentWorkingDirectory;
     }
 
     /**
@@ -161,7 +211,7 @@ public class DirectoryTree {
     public void printDirectoryTree() {
         root.printChildren(0);
     }
-//TODO Check if name is valid or no
+
     /**
      * Creates a directory with the indicated <code>name</code> and adds it to the
      * children of the cursor node.
@@ -175,14 +225,18 @@ public class DirectoryTree {
      *                                  directory are occupied.
      */
     public void makeDirectory(String name) throws IllegalArgumentException, FullDirectoryException {
+        if (name.contains(" ") || name.contains("/"))
+            throw new IllegalArgumentException("The entered name is illegal!");
+
+        // Catch and print NotADirectoryException, but thorws the rest.
         try {
             cursor.addChild(new DirectoryNode(name, false));
         } catch (NotADirectoryException e) {
             System.out.println(e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw e;
         } catch (FullDirectoryException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw e;
         } catch (Exception e) {
             throw e;
         }
@@ -201,16 +255,68 @@ public class DirectoryTree {
      *                                  directory are occupied.
      */
     public void makeFile(String name) throws IllegalArgumentException, FullDirectoryException {
+        if (name.contains(" ") || name.contains("/"))
+            throw new IllegalArgumentException("The entered name is illegal!");
+
+        // Catch and print NotADirectoryException, but thorws the rest.
         try {
             cursor.addChild(new DirectoryNode(name, true));
         } catch (NotADirectoryException e) {
             System.out.println(e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw e;
         } catch (FullDirectoryException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw e;
         } catch (Exception e) {
             throw e;
         }
+    }
+
+    public String findInTree(String name) throws IllegalArgumentException {
+        if (name.contains("/") || name.contains(" "))
+            throw new IllegalArgumentException("name Contains Illegal Characters!");
+
+        try {
+            findInTreeHelper(root, "", name);
+        } catch (IllegalCallerException e) {
+            return e.getMessage();
+        } catch (Exception e) {
+            throw e;
+        }
+
+        throw new IllegalArgumentException("No such file exists!");
+    }
+
+    public void findInTreeHelper(DirectoryNode nodePtr, String pathTaken, String name) {
+        if (nodePtr.getName().equals(name)) {
+            throw new IllegalCallerException((pathTaken + "/" + name).substring(1));
+        }
+
+        for (int i = 0; i < DirectoryNode.MAX_CHILDREN; i++) {
+            if (nodePtr.getChild(i) != null) {
+                findInTreeHelper(nodePtr.getChild(i), pathTaken + "/" + nodePtr.getName(), name);
+            }
+        }
+    }
+
+    /**
+     * TODO javadoc
+     * 
+     * @param str
+     * 
+     * @return
+     * 
+     * @throws IllegalArgumentException
+     */
+    private String removeLastDirectory(String str) throws IllegalArgumentException {
+        if (!str.contains("/"))
+            throw new IllegalArgumentException("This Parent has no Children!");
+
+        int indexOfLastSlash = str.length() - 1;
+        while (str.charAt(indexOfLastSlash) != '/') {
+            indexOfLastSlash--;
+        }
+
+        return str.substring(0, indexOfLastSlash);
     }
 }

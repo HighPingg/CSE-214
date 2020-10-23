@@ -46,8 +46,14 @@ public class DirectoryNode {
      * 
      * @param isFile Whether or not this <code>DirectoryNode</code> is a file or a
      *               folder.
+     * 
+     * @throws IllegalArgumentException If <code>name</code> contains illegal
+     *                                  characters ' ' or '/'.
      */
-    public DirectoryNode(String name, boolean isFile) {
+    public DirectoryNode(String name, boolean isFile) throws IllegalArgumentException {
+        if (name.contains(" ") || name.contains("/"))
+            throw new IllegalArgumentException("name Contains Illegal Characters!");
+
         this.name = name;
         this.children = new DirectoryNode[MAX_CHILDREN];
         this.isFile = isFile;
