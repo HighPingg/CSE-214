@@ -1,5 +1,22 @@
 package Homework_5;
 
+/**
+ * Represents a node in the file tree. The <code>DirectoryNode</code> class
+ * contains <code>MAX_CHILDREN</code> references. In addition, the class
+ * contains a <code>String</code> member variable <code>name</code>, which
+ * indicates the name of the node in the tree. Also has a getter and remove
+ * fundtion for the children, a funtion to print the subtree of this node, and a
+ * <code>boolean isFile</code> reference to determine whether or not this node
+ * is a file or directory.
+ * 
+ * @author <b>Name</b>: Vincent Zheng
+ *         <li><b>Solar_ID:</b> 113469839</li>
+ *         <li><b>Email:</b> vincent.zheng@stonybrook.edu</li>
+ *         <li><b>Assignment:</b> 5</li>
+ *         <li><b>Course</b>: CSE 214</li>
+ *         <li><b>Recitation</b>: R02</li>
+ *         <li><b>TA</b>: William Simunek</li>
+ */
 public class DirectoryNode {
 
     /**
@@ -21,16 +38,17 @@ public class DirectoryNode {
      * Differentiates whether or not this node is a file or folder:
      * <ul>
      * <li><code>true</code> if this <code>DirectoryNode</code> is a file.</li>
-     * <li><code>false</code> if this <code>DirectoryNode</code> is a folder.</li>
+     * <li><code>false</code> if this <code>DirectoryNode</code> is a folder.
+     * </li>
      * </ul>
      */
     private boolean isFile;
 
     /**
-     * Default contructor initializes a new <code>DirectoryNode</code> object with
-     * the <code>children</code> set to <code>null</code> while setting
-     * <code>name</code> to an empty <code>String</code> and <code>isFile</code> to
-     * <code>true</code>.
+     * Default contructor initializes a new <code>DirectoryNode</code> object
+     * with the <code>children</code> set to <code>null</code> while setting
+     * <code>name</code> to an empty <code>String</code> and <code>isFile</code>
+     * to <code>true</code>.
      */
     public DirectoryNode() {
         this.name = "";
@@ -39,20 +57,24 @@ public class DirectoryNode {
     }
 
     /**
-     * Overloader constructor sets <code>name</code> and <code>isFile</code> to the
-     * given values while setting the <code>children</code> to <code>null</code>.
+     * Overloader constructor sets <code>name</code> and <code>isFile</code> to
+     * the given values while setting the <code>children</code> to
+     * <code>null</code>.
      * 
      * @param name   The name of this <code>DirectoryNode</code>.
      * 
-     * @param isFile Whether or not this <code>DirectoryNode</code> is a file or a
-     *               folder.
+     * @param isFile Whether or not this <code>DirectoryNode</code> is a file or
+     *               a folder.
      * 
      * @throws IllegalArgumentException If <code>name</code> contains illegal
      *                                  characters ' ' or '/'.
      */
-    public DirectoryNode(String name, boolean isFile) throws IllegalArgumentException {
+    public DirectoryNode(String name, boolean isFile) throws
+                                                IllegalArgumentException
+    {
         if (name.contains(" ") || name.contains("/"))
-            throw new IllegalArgumentException("name Contains Illegal Characters!");
+            throw new IllegalArgumentException(
+                                        "name Contains Illegal Characters!");
 
         this.name = name;
         this.children = new DirectoryNode[MAX_CHILDREN];
@@ -81,7 +103,8 @@ public class DirectoryNode {
      * Return whether or not this <code>DirectoryNode</code> is a file or not.
      * 
      * @return <b>true</b> if this <code>DirectoryNode</code> is a file.
-     *         <li><b>false</b> if this <code>DirectoryNode</code> is a folder.</li>
+     *         <li><b>false</b> if this <code>DirectoryNode</code> is a folder.
+     *         </li>
      */
     public boolean isFile() {
         return isFile;
@@ -97,26 +120,29 @@ public class DirectoryNode {
      */
     public DirectoryNode getChild(int index) throws IllegalArgumentException {
         if (index < 0 || index >= MAX_CHILDREN)
-            throw new IllegalArgumentException("The index of getChild() Out-Of-Bounds");
+            throw new IllegalArgumentException(
+                                    "The index of getChild() Out-Of-Bounds");
 
         return children[index];
     }
 
     /**
-     * Adds <code>newChild</code> to any of the open child positions of this node
-     * <code>children</code> checked from left to right order.
+     * Adds <code>newChild</code> to any of the open child positions of this
+     * node <code>children</code> checked from left to right order.
      * 
-     * @param newNode The new <code>DirectoryNode</code> to add as a child to this
-     *                node.
+     * @param newNode The new <code>DirectoryNode</code> to add as a child to
+     *                this node.
      * 
      * @throws FullDirectoryException Thrown if all child references of this
      *                                directory are occupied.
      * 
-     * @throws NotADirectoryException Thrown if the current node is a file, as files
-     *                                cannot contain DirectoryNode references (i.e.
-     *                                all files are leaves).
+     * @throws NotADirectoryException Thrown if the current node is a file, as
+     *                                files cannot contain DirectoryNode
+     *                                references (i.e. all files are leaves).
      */
-    public void addChild(DirectoryNode newNode) throws FullDirectoryException, NotADirectoryException {
+    public void addChild(DirectoryNode newNode) throws FullDirectoryException,
+                                                NotADirectoryException
+    {
         if (isFile)
             throw new NotADirectoryException("The Current Node is a File!");
 
@@ -138,8 +164,8 @@ public class DirectoryNode {
      * 
      * @param name The name of the node to remove.
      * 
-     * @throws NotADirectoryException If the node cannot be found in the children of
-     *                                this node.
+     * @throws NotADirectoryException If the node cannot be found in the
+     *                                children of this node.
      */
     public void removeNode(String name) throws NotADirectoryException {
         for (int i = 0; i < children.length; i++) {
@@ -153,17 +179,17 @@ public class DirectoryNode {
     }
 
     /**
-     * Recursively prints out the current <code>DirectoryNode</code> and its entire
-     * subtree.
+     * Recursively prints out the current <code>DirectoryNode</code> and its
+     * entire subtree.
      * 
      * @param depth the depth that the current <code>DirectoryNode</code> is in.
-     *              This corresponds to the number of tabs that will be in front of
-     *              the <code>DirectoryNode</code> when it prints.
+     *              This corresponds to the number of tabs that will be in front
+     *              of the <code>DirectoryNode</code> when it prints.
      */
     public void printChildren(int depth) {
 
-        // Print out spaces in front of the file/folder according to its depth in the
-        // tree.
+        // Print out spaces in front of the file/folder according to its depth
+        // in the tree.
         for (int i = 0; i < depth; i++)
             System.out.print("\t");
         if (isFile) {
