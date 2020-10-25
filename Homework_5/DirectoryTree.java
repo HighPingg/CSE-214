@@ -241,7 +241,7 @@ public class DirectoryTree {
      * the directory tree, starting from the <code>cursor</code>.
      */
     public void printDirectoryTree() {
-        root.printChildren(0);
+        cursor.printChildren(0);
     }
 
     /**
