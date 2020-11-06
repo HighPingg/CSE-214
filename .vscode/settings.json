@@ -3,4 +3,8 @@
         80
     ],
     "java.format.settings.url": "eclipse-formatter.xml",
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "C:\\Users\\zheng\\Desktop\\CSE-214\\Homework_6\\bigdata.jar"
+    ],
 }
