@@ -158,13 +158,16 @@ public class Auction {
      * 
      */
     public void newBid(String bidderName, double bidAmt) throws ClosedAuctionException {
-        if (timeRemaining == 0)
-            throw new ClosedAuctionException("");
+        if (timeRemaining == 0) {
+            throw new ClosedAuctionException("Bid Rejected.");
+        }
 
         if (currentBid < bidAmt) {
             buyerName = bidderName;
             currentBid = bidAmt;
         }
+
+        System.out.println("Bid Accepted.");
     }
 
     /**
