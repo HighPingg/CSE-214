@@ -159,8 +159,7 @@ public class Auction {
      */
     public void newBid(String bidderName, double bidAmt) throws ClosedAuctionException {
         if (timeRemaining == 0)
-            throw new ClosedAuctionException("Auction " + auctionID + "is CLOSE" + "D\n\tCurrent Bid: $ "
-                    + String.format("%,.2f", currentBid) + "\n\nYou can no longer bid on this item.\n");
+            throw new ClosedAuctionException("");
 
         if (currentBid < bidAmt) {
             buyerName = bidderName;
@@ -175,8 +174,9 @@ public class Auction {
      */
     @Override
     public String toString() {
-        return String.format("  %9d | $%9,.2f | %-21s | %-23s | %3d hours | %s", auctionID, currentBid, sellerName,
-                buyerName, timeRemaining, itemInfo.substring(0, 42));
+        return String.format("  %9s | %10s | %-21s | %-23s | %3d hours | %s", auctionID,
+                currentBid == 0.0 ? "" : String.format("%,.2f", currentBid), sellerName, buyerName, timeRemaining,
+                itemInfo.substring(0, Math.min(42, itemInfo.length())));
     }
 
 }

@@ -2,6 +2,7 @@ package Homework_6;
 
 import big.data.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class AuctionTable extends HashMap<String, Auction> {
@@ -26,6 +27,10 @@ public class AuctionTable extends HashMap<String, Auction> {
      *                                  or invalid syntax).
      */
     public static AuctionTable buildFromURL(String URL) throws IllegalArgumentException {
+        if (!URL.substring(URL.length() - 4).toLowerCase().equals(".xml"))
+            throw new IllegalArgumentException("URL is not a XML file!");
+
+        System.out.println("\nLoading...");
         DataSource ds = DataSource.connect(URL).load();
 
         String[] sellerName = ds.fetchStringArray("listing/seller_info/seller_name");
@@ -54,9 +59,9 @@ public class AuctionTable extends HashMap<String, Auction> {
         /*
          * This chunk of code converts the time_left nodes in the XML from day/hour
          * format to just hours. This is dont by finding the index of the first match
-         * for "day" and "hour" or "hr" and looping backwards to get all of the numbers. The
-         * backwards loop will stop when either the end of the String is reached or it
-         * encounters a non-number character.
+         * for "day" and "hour" or "hr" and looping backwards to get all of the numbers.
+         * The backwards loop will stop when either the end of the String is reached or
+         * it encounters a non-number character.
          */
         String[] timeLeftRaw = ds.fetchStringArray("listing/auction_info/time_left");
         int[] timeLeft = new int[timeLeftRaw.length];
@@ -67,7 +72,6 @@ public class AuctionTable extends HashMap<String, Auction> {
             if (timeLeftRaw[i].contains("day")) {
                 int indexOfDay = timeLeftRaw[i].indexOf("day");
                 int timeDays = 0;
-                System.out.println(indexOfDay);
 
                 for (int j = indexOfDay - 2; j >= 0 && timeLeftRaw[i].charAt(j) >= (int) '0'
                         && timeLeftRaw[i].charAt(j) <= (int) '9'; j--) {
@@ -75,7 +79,6 @@ public class AuctionTable extends HashMap<String, Auction> {
                             * (int) Math.pow(10, (indexOfDay - 2 - j));
                 }
 
-                System.out.println(timeDays);
                 totalTime += 24 * timeDays;
             }
 
@@ -84,7 +87,6 @@ public class AuctionTable extends HashMap<String, Auction> {
                 int indexOfHour = timeLeftRaw[i].indexOf("hour") != -1 ? timeLeftRaw[i].indexOf("hour")
                         : timeLeftRaw[i].indexOf("hr");
                 int timeHours = 0;
-                System.out.println(indexOfHour);
 
                 for (int j = indexOfHour - 2; j >= 0 && timeLeftRaw[i].charAt(j) >= (int) '0'
                         && timeLeftRaw[i].charAt(j) <= (int) '9'; j--) {
@@ -92,7 +94,6 @@ public class AuctionTable extends HashMap<String, Auction> {
                             * (int) Math.pow(10, (indexOfHour - 2 - j));
                 }
 
-                System.out.println(timeHours);
                 totalTime += timeHours;
             }
 
@@ -111,6 +112,7 @@ public class AuctionTable extends HashMap<String, Auction> {
                             String.format("%s - %s - %s", itemCPU[i], itemMemory[i], itemHardDrive[i])));
         }
 
+        System.out.println("Auction data loaded successfully!");
         return newTable;
     }
 
@@ -170,7 +172,12 @@ public class AuctionTable extends HashMap<String, Auction> {
      * if they are expired (<code>timeRemaining == 0</code>).
      */
     public void removeExpiredAuctions() {
-        for (String auctionID : keySet()) {
+        ArrayList<String> keys = new ArrayList<>();
+        for (String key : keySet()) {
+            keys.add(key);
+        }
+
+        for (String auctionID : keys) {
             if (get(auctionID).getTimeRemaining() == 0) {
                 remove(auctionID);
             }
@@ -189,8 +196,6 @@ public class AuctionTable extends HashMap<String, Auction> {
         for (Auction auction : values()) {
             System.out.println(auction.toString());
         }
-
-        System.out.println("\n");
     }
 
 }
