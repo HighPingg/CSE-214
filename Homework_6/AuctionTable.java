@@ -27,9 +27,7 @@ public class AuctionTable extends HashMap<String, Auction> {
      *                                  or invalid syntax).
      */
     public static AuctionTable buildFromURL(String URL) throws IllegalArgumentException {
-        if (!URL.substring(URL.length() - 4).toLowerCase().equals(".xml"))
-            throw new IllegalArgumentException("URL is not a XML file!");
-
+        
         System.out.println("\nLoading...");
         DataSource ds = DataSource.connect(URL).load();
 

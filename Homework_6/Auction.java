@@ -165,9 +165,10 @@ public class Auction {
         if (currentBid < bidAmt) {
             buyerName = bidderName;
             currentBid = bidAmt;
+            System.out.println("Bid Accepted.");
+        } else {
+            System.out.println("Bid Rejected.");
         }
-
-        System.out.println("Bid Accepted.");
     }
 
     /**
