@@ -1,5 +1,10 @@
 package Homework_6;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Scanner;
 
 public class AuctionSystem {
@@ -17,14 +22,14 @@ public class AuctionSystem {
     private String username;
 
     /**
-     * Initializes a new <code>AuctionSystem</code> object give the
-     * <code>username</code>.
+     * Initializes a new <code>AuctionSystem</code> object given the
+     * <code>username</code> and <code>auctionTable</code>.
      * 
      * @param username The <code>username</code> of the user.
      */
-    public AuctionSystem(String username) {
+    public AuctionSystem(String username, AuctionTable auctionTable) {
         this.username = username;
-        this.auctionTable = new AuctionTable();
+        this.auctionTable = auctionTable;
     }
 
     /**
@@ -187,7 +192,7 @@ public class AuctionSystem {
      *                                  or is non-positive.
      */
     public void letTimePass(Scanner inputStream) throws IllegalArgumentException {
-        System.out.println("How many hours should pass: ");
+        System.out.print("How many hours should pass: ");
         int timePass;
         try {
             timePass = Integer.parseInt(inputStream.nextLine());
@@ -201,11 +206,45 @@ public class AuctionSystem {
     }
 
     /**
+     * Saves the current state of auctionTable into an object file auction.obj.
+     * 
+     * @throws IOException If the file exists but is a directory rather than a
+     *                     regular file, does not exist but cannot be created, or
+     *                     cannot be opened for any other reason (pulled out of the
+     *                     Java API docs).
+     */
+    public void saveTable() throws IOException {
+        FileOutputStream file = new FileOutputStream("auction.obj");
+        ObjectOutputStream outStream = new ObjectOutputStream(file);
+
+        outStream.writeObject(auctionTable);
+        outStream.close();
+    }
+
+    /**
      * The method should first prompt the user for a username. This should be stored
      * in username The rest of the program will be executed on behalf of this user.
      * It would have an option to import a URL, create and Auction, etc...
      */
     public static void main(String[] args) {
+        System.out.println("Starting...");
+
+        // Importing the table from an auction.obj file. If this file is found, converts
+        // it to an AuctionTable and stores it into table. If it's not found, then set
+        // table to a new AuctionTable().
+        AuctionTable table;
+        try {
+            FileInputStream file = new FileInputStream("auction.obj");
+            ObjectInputStream inStream = new ObjectInputStream(file);
+            System.out.println("Loading previous Auction Table...");
+            table = (AuctionTable) inStream.readObject();
+            inStream.close();
+        } catch (Exception e) {
+            System.out.println("No previous auction table detected.");
+            System.out.println("Creating new table...\n");
+            table = new AuctionTable();
+        }
+
         Scanner input = new Scanner(System.in);
 
         // Keeps asking user for a username until a non-empty one is entered.
@@ -218,7 +257,7 @@ public class AuctionSystem {
                 System.out.println("ERROR: Username Cannot Be Empty!");
         } while (username.equals(""));
 
-        AuctionSystem system = new AuctionSystem(username);
+        AuctionSystem system = new AuctionSystem(username, table);
 
         boolean userQuit = false;
         do {
@@ -278,6 +317,16 @@ public class AuctionSystem {
                 e.printStackTrace();
             }
         } while (!userQuit);
+
+        // Saves the current AuctionTable to anh auction.obj file by calling
+        // saveTable().
+        System.out.println("\nWriting auction table to file...");
+        try {
+            system.saveTable();
+            System.out.println("Done!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         input.close();
         System.out.println("\nGoodbye");

@@ -1,6 +1,13 @@
 package Homework_6;
 
-public class Auction {
+import java.io.Serializable;
+
+public class Auction implements Serializable {
+
+    /**
+     * Default serial version UID
+     */
+    private static final long serialVersionUID = 1L;
 
     /**
      * The total amount of time left on this <code>Auction</code> (in hours).

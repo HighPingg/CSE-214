@@ -1,6 +1,6 @@
-* Instructions: https://blackboard.stonybrook.edu/bbcswebdav/pid-5779662-dt-content-rid-48811472_1/courses/1208-CSE-214-SEC01-89077/hw6%281%29.html
+* Instructions: https://blackboard.stonybrook.edu/bbcswebdav/pid-5779662-dt-content-rid-49015094_1/courses/1208-CSE-214-SEC01-89077/hw6%283%29.html
 
-* Rubric: https://blackboard.stonybrook.edu/bbcswebdav/pid-5779662-dt-content-rid-48811473_1/courses/1208-CSE-214-SEC01-89077/hw6key%282%29.html
+* Rubric: https://blackboard.stonybrook.edu/bbcswebdav/pid-5779662-dt-content-rid-49015095_1/courses/1208-CSE-214-SEC01-89077/hw6key%284%29.html
 
 * BigData.jar Documentation: https://github.com/berry-cs/big-data-cse
 
