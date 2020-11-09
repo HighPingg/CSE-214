@@ -7,6 +7,23 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Scanner;
 
+/**
+ * This class lets the user interact with an <code>AuctionSystem</code>. It has
+ * a <code>auctionTable</code> that is determined at startup by finding an
+ * <code>auctions.obj</code> file. If the file isn't found, then it creates a
+ * new <code>AuctionTable</code> object. It also has a username that the user
+ * will enter before they are allowed to use the auction system. After the user
+ * is done, the system will then serialize the <code>auctionTable</code> again
+ * and write it to <code>auctions.obj</code>.
+ * 
+ * @author <b>Name</b>: Vincent Zheng
+ *      <li><b>Solar_ID:</b> 113469839</li>
+ *      <li><b>Email:</b> vincent.zheng@stonybrook.edu</li>
+ *      <li><b>Assignment:</b> 5</li>
+ *      <li><b>Course</b>: CSE 214</li>
+ *      <li><b>Recitation</b>: R02</li>
+ *      <li><b>TA</b>: William Simunek</li>
+ */
 public class AuctionSystem {
 
     /**
@@ -34,9 +51,11 @@ public class AuctionSystem {
 
     /**
      * Takes the next input as the URL and calls the
-     * <code>AuctionTable.buildFromURL()</code> method.
+     * <code>AuctionTable.buildFromURL()</code> method. Adds the
+     * <code>Auctions</code> to the table.
      * 
-     * @param inputStream The input stream to take the URL from <code>String</code>.
+     * @param inputStream The input stream to take the URL from
+     *                    <code>String</code>.
      * 
      * @throws IllegalArgumentException If the input is an empty .
      */
@@ -47,19 +66,22 @@ public class AuctionSystem {
         if (URL.length() == 0)
             throw new IllegalArgumentException("The URL Cannot Be Empty!");
 
-        auctionTable = AuctionTable.buildFromURL(URL);
+        for (Auction auction : AuctionTable.buildFromURL(URL).values()) {
+            auctionTable.putAuction(auction.getAuctionID(), auction);
+        }
     }
 
     /**
-     * Takes inputs for auction ID, auction time, and item info and creates a new
-     * Auction and puts it into <code>auctionTable</code>.
+     * Takes inputs for auction ID, auction time, and item info and creates a
+     * new Auction and puts it into <code>auctionTable</code>.
      * 
      * @param inputStream The input stream to take the inputs from.
      * 
-     * @throws IllegalArgumentException If any of the inputs are invalid or if the
-     *                                  same auction ID already has an item.
+     * @throws IllegalArgumentException If any of the inputs are invalid or if
+     *                                  the same auction ID already has an item.
      */
-    public void newAuction(Scanner inputStream) throws IllegalArgumentException {
+    public void newAuction(Scanner inputStream) throws IllegalArgumentException
+    {
         // Getting and checking username
         System.out.println("\nCreating new Auction as " + username + ".");
         System.out.print("Please enter an Auction ID: ");
@@ -76,10 +98,12 @@ public class AuctionSystem {
         try {
             auctionTime = Integer.parseInt(inputStream.nextLine());
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Auction Time Must Be a Number!");
+            throw new IllegalArgumentException(
+                                            "Auction Time Must Be a Number!");
         }
         if (auctionTime <= 0)
-            throw new IllegalArgumentException("Auction Time Must Be Positive!");
+            throw new IllegalArgumentException(
+                                            "Auction Time Must Be Positive!");
 
         // Getting and checking auction info
         System.out.print("Please enter some Item Info: ");
@@ -90,23 +114,27 @@ public class AuctionSystem {
             System.out.println("Item Info cannot be empty!");
 
         // Putting all the entered information into the table.
-        auctionTable.putAuction(auctionID, new Auction(auctionTime, 0.0, auctionID, username, "", itemInfo));
+        auctionTable.putAuction(auctionID, new Auction(auctionTime, 0.0,
+                                            auctionID, username, "", itemInfo));
     }
 
     /**
-     * Takes an <code>auctionID</code> and puts a bid onto an <code>Auction</code>
-     * with that <code>auctionID</code>.
+     * Takes an <code>auctionID</code> and puts a bid onto an
+     * <code>Auction</code> with that <code>auctionID</code>.
      * 
-     * @param inputStream The input stream to take the <code>auctionID</code> from.
+     * @param inputStream The input stream to take the <code>auctionID</code>
+     *                    from.
      * 
-     * @throws IllegalArgumentException If the <code>auctionID</code> is invalid or
-     *                                  doesn't match with an existing
+     * @throws IllegalArgumentException If the <code>auctionID</code> is invalid
+     *                                  or doesn't match with an existing
      *                                  <code>Auction</code>.
      * 
      * @throws ClosedAuctionException   If the <code>Auction</code> is already
      *                                  closed.
      */
-    public void putBid(Scanner inputStream) throws IllegalArgumentException, ClosedAuctionException {
+    public void putBid(Scanner inputStream) throws IllegalArgumentException,
+                                                    ClosedAuctionException
+    {
 
         // Taking and checking the auctionID.
         System.out.print("Please enter an Auction ID: ");
@@ -116,12 +144,16 @@ public class AuctionSystem {
 
         Auction auction = auctionTable.getAuction(auctionID);
         if (auction == null)
-            throw new IllegalArgumentException("Auction Not Found In The Table!");
+            throw new IllegalArgumentException(
+                                            "Auction Not Found In The Table!");
 
-        // Outputs whether the auction is closed or open and get the current bid.
-        System.out.printf("Auction %s is %s\n", auctionID, auction.getTimeRemaining() == 0 ? "CLOSED" : "OPEN");
+        // Outputs whether the auction is closed or open and get the current
+        // bid.
+        System.out.printf("Auction %s is %s\n", auctionID,
+                           auction.getTimeRemaining() == 0 ? "CLOSED" : "OPEN");
         System.out.printf("\tCurrent Bid: %s\n\n",
-                auction.getCurrentBid() == 0.0 ? "None" : String.format("$%,9.2f", auction.getCurrentBid()));
+                auction.getCurrentBid() == 0.0 ? "None" : String.format(
+                                           "$%,9.2f", auction.getCurrentBid()));
 
         // If there is no time remaining tells the user they can't bid.
         if (auction.getTimeRemaining() == 0.0) {
@@ -134,7 +166,8 @@ public class AuctionSystem {
             try {
                 bidAmt = Integer.parseInt(inputStream.nextLine());
             } catch (NumberFormatException e) {
-                throw new IllegalArgumentException("Bid Amount Must Be a Number!");
+                throw new IllegalArgumentException(
+                                                "Bid Amount Must Be a Number!");
             }
 
             auction.newBid(username, bidAmt);
@@ -157,7 +190,8 @@ public class AuctionSystem {
 
         Auction auction = auctionTable.getAuction(auctionID);
         if (auction == null)
-            throw new IllegalArgumentException("Auction Not Found In The Table!");
+            throw new IllegalArgumentException(
+                                            "Auction Not Found In The Table!");
 
         System.out.println("\nAuction " + auctionID + ":");
         System.out.println("\tSeller: " + auction.getSellerName());
@@ -184,14 +218,16 @@ public class AuctionSystem {
 
     /**
      * Takes in an <code>int</code> time, checks it, and calls
-     * <code>lettimePass()</code> based on the input on <code>auctionTable</code>.
+     * <code>lettimePass()</code> based on the input on
+     * <code>auctionTable</code>.
      * 
      * @param inputStream The input stream to take the time from.
      * 
-     * @throws IllegalArgumentException Thrown if the entered time isn't an integer
-     *                                  or is non-positive.
+     * @throws IllegalArgumentException Thrown if the entered time isn't an
+     *                                  integer or is non-positive.
      */
-    public void letTimePass(Scanner inputStream) throws IllegalArgumentException {
+    public void letTimePass(Scanner inputStream) throws IllegalArgumentException
+    {
         System.out.print("How many hours should pass: ");
         int timePass;
         try {
@@ -209,9 +245,9 @@ public class AuctionSystem {
      * Saves the current state of auctionTable into an object file auction.obj.
      * 
      * @throws IOException If the file exists but is a directory rather than a
-     *                     regular file, does not exist but cannot be created, or
-     *                     cannot be opened for any other reason (pulled out of the
-     *                     Java API docs).
+     *                     regular file, does not exist but cannot be created,
+     *                     or cannot be opened for any other reason (pulled out
+     *                     of the Java API docs).
      */
     public void saveTable() throws IOException {
         FileOutputStream file = new FileOutputStream("auction.obj");
@@ -222,16 +258,17 @@ public class AuctionSystem {
     }
 
     /**
-     * The method should first prompt the user for a username. This should be stored
-     * in username The rest of the program will be executed on behalf of this user.
-     * It would have an option to import a URL, create and Auction, etc...
+     * The method should first prompt the user for a username. This should be
+     * stored in username The rest of the program will be executed on behalf of
+     * this user. It would have an option to import a URL, create and Auction,
+     * etc...
      */
     public static void main(String[] args) {
         System.out.println("Starting...");
 
-        // Importing the table from an auction.obj file. If this file is found, converts
-        // it to an AuctionTable and stores it into table. If it's not found, then set
-        // table to a new AuctionTable().
+        // Importing the table from an auction.obj file. If this file is found,
+        // converts it to an AuctionTable and stores it into table. If it's not
+        // found, then set table to a new AuctionTable().
         AuctionTable table;
         try {
             FileInputStream file = new FileInputStream("auction.obj");
@@ -271,8 +308,8 @@ public class AuctionSystem {
             System.out.println("(Q) - Quit");
             System.out.print("\nPlease select an option: ");
 
-            // Calls a different method according to the input. If input isn't matched, the
-            // go to default case. Input ISN'T case-sensitive!
+            // Calls a different method according to the input. If input isn't
+            // matched, the go to default case. Input ISN'T case-sensitive!
             try {
                 switch (input.nextLine().toUpperCase().trim()) {
                     case "D":

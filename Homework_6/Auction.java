@@ -2,6 +2,23 @@ package Homework_6;
 
 import java.io.Serializable;
 
+/**
+ * <code>Auction</code> represents an <code>Auction</code> inside the
+ * <code>AuctionTable</code>. Each auction has a <code>timeRemaining</code>,
+ * <code>currentBid</code>, <code>auctionID</code>, <code>sellerName</code>,
+ * <code>buyerName</code>, and <code>itemInfo</code>. It has getters for all
+ * member variables, a method to decrease the time on this auction and make a
+ * new bid on this <code>Auction</code>. It finally has an option to print a
+ * tabular form of this <code>Auction</code>.
+ * 
+ * @author <b>Name</b>: Vincent Zheng
+ *      <li><b>Solar_ID:</b> 113469839</li>
+ *      <li><b>Email:</b> vincent.zheng@stonybrook.edu</li>
+ *      <li><b>Assignment:</b> 5</li>
+ *      <li><b>Course</b>: CSE 214</li>
+ *      <li><b>Recitation</b>: R02</li>
+ *      <li><b>TA</b>: William Simunek</li>
+ */
 public class Auction implements Serializable {
 
     /**
@@ -74,8 +91,9 @@ public class Auction implements Serializable {
      * 
      * @param itemInfo      The value to set <code>itemInfo</code> to.
      */
-    public Auction(int timeRemaining, double currentBid, String auctionID, String sellerName, String buyerName,
-            String itemInfo) {
+    public Auction(int timeRemaining, double currentBid, String auctionID,
+                    String sellerName, String buyerName, String itemInfo)
+    {
         this.timeRemaining = timeRemaining;
         this.currentBid = currentBid;
         this.auctionID = auctionID;
@@ -85,7 +103,8 @@ public class Auction implements Serializable {
     }
 
     /**
-     * Return the current value of <code>timeRemaining</code> stored in this object.
+     * Return the current value of <code>timeRemaining</code> stored in this
+     * object.
      * 
      * @return The current value of <code>timeRemaining</code>.
      */
@@ -94,7 +113,8 @@ public class Auction implements Serializable {
     }
 
     /**
-     * Return the current value of <code>currentBid</code> stored in this object.
+     * Return the current value of <code>currentBid</code> stored in this
+     * object.
      * 
      * @return The current value of <code>currentBid</code>.
      */
@@ -112,7 +132,8 @@ public class Auction implements Serializable {
     }
 
     /**
-     * Return the current value of <code>sellerName</code> stored in this object.
+     * Return the current value of <code>sellerName</code> stored in this
+     * object.
      * 
      * @return The current value of <code>sellerName</code>.
      */
@@ -140,8 +161,8 @@ public class Auction implements Serializable {
 
     /**
      * Decreases the time remaining for this auction by the specified amount. If
-     * <code>time</code> is greater than the current remaining time for the auction,
-     * then the time remaining is set to 0.
+     * <code>time</code> is greater than the current remaining time for the
+     * auction, then the time remaining is set to 0.
      * 
      * @param time The amount of time to decrease <code>timeRemaining</code> by.
      */
@@ -152,19 +173,21 @@ public class Auction implements Serializable {
     /**
      * Makes a new bid on this auction. If <code>bidAmt</code> is larger than
      * <code>currentBid</code>, then the value of <code>currentBid</code> is
-     * replaced by <code>bidAmt</code> and <code>buyerName</code> is is replaced by
-     * <code>bidderName</code>.
+     * replaced by <code>bidAmt</code> and <code>buyerName</code> is is replaced
+     * by <code>bidderName</code>.
      * 
      * @param bidderName The name of the new bidder.
      * 
      * @param bidAmt     The new bidder's price.
      * 
-     * @throws ClosedAuctionException Thrown if the auction is closed and no more
-     *                                bids can be placed (i.e.
+     * @throws ClosedAuctionException Thrown if the auction is closed and no
+     *                                more bids can be placed (i.e.
      *                                <code>timeRemaining == 0</code>).
      * 
      */
-    public void newBid(String bidderName, double bidAmt) throws ClosedAuctionException {
+    public void newBid(String bidderName, double bidAmt) throws
+                                                        ClosedAuctionException
+    {
         if (timeRemaining == 0) {
             throw new ClosedAuctionException("Bid Rejected.");
         }
@@ -185,8 +208,10 @@ public class Auction implements Serializable {
      */
     @Override
     public String toString() {
-        return String.format("  %9s | %10s | %-21s | %-23s | %3d hours | %s", auctionID,
-                currentBid == 0.0 ? "" : String.format("%,.2f", currentBid), sellerName, buyerName, timeRemaining,
+        return String.format("  %9s | %10s | %-21s | %-23s | %3d hours | %s",
+                auctionID, currentBid == 0.0 ? "" :
+                String.format("%,.2f", currentBid), sellerName, buyerName,
+                timeRemaining,
                 itemInfo.substring(0, Math.min(42, itemInfo.length())));
     }
 
