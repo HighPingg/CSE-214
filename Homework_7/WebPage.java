@@ -2,6 +2,22 @@ package Homework_7;
 
 import java.util.ArrayList;
 
+/**
+ * Represents a hyperlinked document. The <code>WebPage</code> class contains a
+ * single <code>String</code> for the url of the page, an <code>int</code> to
+ * represent its position in the adjacency matrix, an <code>int</code> to
+ * represent the rank of this page, and an <code>ArrayList</code> of keywords
+ * that describe this page. It also contains getters/setter for all member
+ * variables and a <code>toString()</code> method.
+ * 
+ * @author <b>Name</b>: Vincent Zheng
+ *         <li><b>Solar_ID:</b> 113469839</li>
+ *         <li><b>Email:</b> vincent.zheng@stonybrook.edu</li>
+ *         <li><b>Assignment:</b> 7</li>
+ *         <li><b>Course</b>: CSE 214</li>
+ *         <li><b>Recitation</b>: R02</li>
+ *         <li><b>TA</b>: William Simunek</li>
+ */
 public class WebPage {
 
     /**
@@ -25,7 +41,8 @@ public class WebPage {
     private ArrayList<String> keywords;
 
     /**
-     * Constructor initializes a new <code>WebPage</code> with default variables.
+     * Constructor initializes a new <code>WebPage</code> with default
+     * variables.
      */
     public WebPage() {
         this.url = "";
@@ -35,14 +52,15 @@ public class WebPage {
     }
 
     /**
-     * Overloaded contructor initializes a new WebPage with member variables equal
-     * to the given parameters.
+     * Overloaded contructor initializes a new WebPage with member variables
+     * equal to the given parameters.
      * 
      * @param url      The URL of the website.
      * 
      * @param index    The index of the website inside the graph.
      * 
-     * @param keywords The keywords associated with this webpage that describes it.
+     * @param keywords The keywords associated with this webpage that describes
+     *                 it.
      */
     public WebPage(String url, int index, ArrayList<String> keywords) {
         this.url = url;
@@ -130,9 +148,9 @@ public class WebPage {
      */
     @Override
     public String toString() {
-    
-        // Add a ", " before the keyword as long as it's not the first element in the
-        // list.
+
+        // Add a ", " before the keyword as long as it's not the first element
+        // in the list.
         String keywordString = "";
         for (String keyword : keywords) {
             if (!keywordString.equals("")) {
@@ -142,8 +160,8 @@ public class WebPage {
             keywordString += keyword;
         }
 
-
-        return String.format(" %4d | %20s | %8d |***| %s", index, url, rank, keywordString);
+        return String.format(" %4d | %20s | %8d |***| %s", index, url, rank,
+                            keywordString);
     }
 
 }
