@@ -36,6 +36,11 @@ public class SearchEngine {
     private WebGraph web;
 
     /**
+     * The graphical representation of this <code>WebGraph</code>.
+     */
+    private GUI gui;
+
+    /**
      * Initializes a new <code>SearchEngine</code>. Calls the
      * <code>WebGraph</code> constructor to initialize <code>web</code> with a
      * new <code>WebGraph</code> and also tries to build from the two files
@@ -44,6 +49,16 @@ public class SearchEngine {
     public SearchEngine() {
         web = new WebGraph();
         web = WebGraph.buildFromFiles(PAGES_FILE, LINKS_FILE);
+
+        gui = new GUI(web.toStringArray());
+    }
+
+    /**
+     * Calls the <code>GUI.stopProgram</code> method to close the
+     * <code>JFrame</code> window.
+     */
+    public void shutdown() {
+        gui.stopProgram();
     }
 
     /**
@@ -97,6 +112,11 @@ public class SearchEngine {
                 }
 
                 web.addPage(url, keywords);
+
+                // Adds the new WebPage to the table
+                gui.addRow(
+                    new WebPage(url, web.getSize(), keywords).toStringArray());
+
                 System.out.println(
                         "\n" + url + " successuflly added to the WebGraph!\n");
 
@@ -108,6 +128,10 @@ public class SearchEngine {
                 System.out.print("Enter a URL: ");
                 String Url = userIn.nextLine();
                 web.removePage(Url);
+
+                // Refreshes the table with the updated WebGraph
+                gui.refresh(web.toStringArray());
+
                 System.out.println(
                             "\n" + Url + " has been removed from the graph!\n");
 
@@ -123,6 +147,10 @@ public class SearchEngine {
                 String addDestination = userIn.nextLine();
 
                 web.addLink(addSource, addDestination);
+                
+                // Refreshes the table with the updated WebGraph
+                gui.refresh(web.toStringArray());
+
                 System.out.println("\nLink successfully added from " + addSource
                                     + " to " + addDestination + "!\n");
 
@@ -138,6 +166,11 @@ public class SearchEngine {
                 String removeDestination = userIn.nextLine();
 
                 web.removeLink(removeSource, removeDestination);
+                
+                // Refreshes the table with the updated WebGraph
+                gui.refresh(web.toStringArray());
+
+
                 System.out.println("\nLink removed from " + removeSource +
                                         " to " + removeDestination + "!\n");
 
@@ -248,6 +281,7 @@ public class SearchEngine {
         } while (!userQuit);
 
         input.close();
+        engine.shutdown();
         System.out.println("\nGoodbye.");
     }
 }

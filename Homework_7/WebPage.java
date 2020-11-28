@@ -164,4 +164,27 @@ public class WebPage {
                             keywordString);
     }
 
+    /**
+     * Returns an array representation of this <code>WebPage</code>.
+     * 
+     * @return An array with each element equal to different information about
+     *         this <code>WebPage</code>.
+     */
+    public String[] toStringArray() {
+
+        // Add a ", " before the keyword as long as it's not the first element
+        // in the list.
+        String keywordString = "";
+        for (String keyword : keywords) {
+            if (!keywordString.equals("")) {
+                keywordString += ", ";
+            }
+
+            keywordString += keyword;
+        }
+
+        return new String[]{Integer.toString(index), url,
+                            Integer.toString(rank), "", keywordString};
+    }
+
 }

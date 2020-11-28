@@ -49,6 +49,15 @@ public class WebGraph {
     }
 
     /**
+     * Returns the amount of pages currently in the <code>WebGraph</code>.
+     * 
+     * @return the size of <code>pages</code>.
+     */
+    public int getSize() {
+        return pages.size();
+    }
+
+    /**
      * Constructs a <code>WebGraph</code> object using the indicated files as
      * the source for pages and edges.
      * 
@@ -287,7 +296,7 @@ public class WebGraph {
             String linkString = "";
             ArrayList<Integer> theseEdges = edges.get(pages.indexOf(webPage));
             for (int i = 0; i < theseEdges.size(); i++) {
-                if (theseEdges.get(i) == 1) {
+                if (theseEdges.get(i) != 0) {
                     if (!linkString.equals(""))
                         linkString += ", ";
 
@@ -325,7 +334,7 @@ public class WebGraph {
             String linkString = "";
             ArrayList<Integer> theseEdges = edges.get(pages.indexOf(webPage));
             for (int i = 0; i < theseEdges.size(); i++) {
-                if (theseEdges.get(i) == 1) {
+                if (theseEdges.get(i) != 0) {
                     if (!linkString.equals(""))
                         linkString += ", ";
 
@@ -359,6 +368,39 @@ public class WebGraph {
         sortTable(new IndexComparator());
 
         System.out.println();
+    }
+
+    /**
+     * Returns a <code>String[][]</code> representation of this
+     * <code>WebGraph</code>.
+     * 
+     * @return The 2D array with each row having the info of each
+     *         <code>WebPage</code> sorted by indices.
+     */
+    public String[][] toStringArray() {
+        String[][] result = new String[pages.size()][];
+
+        // Goes through every element in pages and calls its toStringArray()
+        // method. Index 3 is empty because we haven't determined its links yet
+        for (int i = 0; i < result.length; i++) {
+            result[i] = pages.get(i).toStringArray();
+
+            // Sets linkString equal to a String representation of all the
+            // WebPages this page is linked to (separated by ", ").
+            String linkString = "";
+            for (int link = 0; link < edges.get(i).size(); link++) {
+                if (edges.get(i).get(link) != 0) {
+                    if (!linkString.equals(""))
+                        linkString += ", ";
+
+                    linkString += link;
+                }
+            }
+            
+            result[i][3] = linkString;
+        }
+
+        return result;
     }
 
     /**
